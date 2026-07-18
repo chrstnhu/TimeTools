@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import Input from "../components/ui/Input";
-import { secondsToTime } from "../utils/secondsToTime";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import { secondsToTime } from "@/utils/secondsToTime";
 import { RotateCcw, Plus, Minus, Save } from "lucide-react";
+import TimeInput from "@/components/calculator/TimeInput";
 
 function DurationCalculator() {
   const initialResult = {
@@ -25,7 +25,6 @@ function DurationCalculator() {
   const [result, setResult] = useState(initialResult);
 
   const handleCalculate = (selectedOperation) => {
-
     const seconds1 = time1.h * 3600 + time1.m * 60 + time1.s;
     const seconds2 = time2.h * 3600 + time2.m * 60 + time2.s;
 
@@ -57,107 +56,21 @@ function DurationCalculator() {
     <Card>
       <div >
 
-        <div>
-          <label htmlFor="time1">Time 1:</label>
+        <TimeInput
+          label="Time 1"
+          id="time1"
+          value={time1}
+          onChange={setTime1}
+          maxHours={23}
+        />
 
-          <div className="flex flex-row items-center">
-            <Input
-              type="number"
-              min="0"
-              id="time1-h"
-              value={time1.h}
-              onChange={(e) =>
-                setTime1({
-                  ...time1,
-                  h: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>h</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time1-m"
-              value={time1.m}
-              onChange={(e) =>
-                setTime1({
-                  ...time1,
-                  m: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>m</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time1-s"
-              value={time1.s}
-              onChange={(e) =>
-                setTime1({
-                  ...time1,
-                  s: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>s</p>
-          </div>
-        </div>
-
-
-        <div>
-          <label htmlFor="time2">Time 2:</label>
-
-          <div className="flex flex-row items-center">
-            <Input
-              type="number"
-              min="0"
-              id="time2-h"
-              value={time2.h}
-              onChange={(e) =>
-                setTime2({
-                  ...time2,
-                  h: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>h</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time2-m"
-              value={time2.m}
-              onChange={(e) =>
-                setTime2({
-                  ...time2,
-                  m: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>m</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time2-s"
-              value={time2.s}
-              onChange={(e) =>
-                setTime2({
-                  ...time2,
-                  s: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>s</p>
-          </div>
-        </div>
-
+        <TimeInput
+          label="Time 2"
+          id="time2"
+          value={time2}
+          onChange={setTime2}
+          maxHours={999}
+        />
 
         <div className="flex gap-2 mt-4">
           <div className="flex gap-2 my-4">
@@ -197,23 +110,17 @@ function DurationCalculator() {
 
       <div className="flex flex-col mt-4">
         <label htmlFor="result">Result:</label>
-
-        <div className="flex flex-row items-center">
-          <p> 
-            {result.total.h} h{" "}
-            {result.total.m.toString().padStart(2, "0")} m{" "}
-            {result.total.s.toString().padStart(2, "0")} s{" "}
-          </p>
-        </div>
-
         <div className="mt-4">
-          <h3>With days:</h3>
-
-          <p>
+          <p className="text-lg font-bold flex flex-row gap-2 items-center">
             {result.days.d} d{" "}
             {result.days.h} h{" "}
             {result.days.m} m{" "}
-            {result.days.s} s
+            {result.days.s} s{" "}
+            {result.days.d > 0 && (
+              <p className="text-sm text-gray-500">
+                (+{result.days.d} {result.days.d === 1 ? "day" : "days"})
+              </p>
+            )}
           </p>
         </div>
 

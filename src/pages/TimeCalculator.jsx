@@ -1,8 +1,9 @@
 import { useState } from "react";
-import Card from "../components/ui/Card";
-import Button from "../components/ui/Button";
-import Input from "../components/ui/Input";
-import { secondsToTime } from "../utils/secondsToTime";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import { secondsToTime } from "@/utils/secondsToTime";
+import TimeInput from "@/components/calculator/TimeInput";
+
 import { RotateCcw, Plus, Minus, Save } from "lucide-react";
 
 function TimeCalculator() {
@@ -57,107 +58,21 @@ function TimeCalculator() {
     <Card>
       <div >
 
-        <div>
-          <label htmlFor="time1">Time 1:</label>
+        <TimeInput
+          label="Time 1"
+          id="time1"
+          value={time1}
+          onChange={setTime1}
+          maxHours={999}
+        />
 
-          <div className="flex flex-row items-center">
-            <Input
-              type="number"
-              min="0"
-              id="time1-h"
-              value={time1.h}
-              onChange={(e) =>
-                setTime1({
-                  ...time1,
-                  h: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>h</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time1-m"
-              value={time1.m}
-              onChange={(e) =>
-                setTime1({
-                  ...time1,
-                  m: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>m</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time1-s"
-              value={time1.s}
-              onChange={(e) =>
-                setTime1({
-                  ...time1,
-                  s: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>s</p>
-          </div>
-        </div>
-
-
-        <div>
-          <label htmlFor="time2">Time 2:</label>
-
-          <div className="flex flex-row items-center">
-            <Input
-              type="number"
-              min="0"
-              id="time2-h"
-              value={time2.h}
-              onChange={(e) =>
-                setTime2({
-                  ...time2,
-                  h: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>h</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time2-m"
-              value={time2.m}
-              onChange={(e) =>
-                setTime2({
-                  ...time2,
-                  m: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>m</p>
-
-            <Input
-              type="number"
-              min="0"
-              max="59"
-              id="time2-s"
-              value={time2.s}
-              onChange={(e) =>
-                setTime2({
-                  ...time2,
-                  s: parseInt(e.target.value) || 0,
-                })
-              }
-            />
-            <p>s</p>
-          </div>
-        </div>
-
+        <TimeInput
+          label="Time 2"
+          id="time2"
+          value={time2}
+          onChange={setTime2}
+          maxHours={999}
+        />
 
         <div className="flex gap-2 mt-4">
           <div className="flex gap-2 my-4">

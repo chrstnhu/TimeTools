@@ -1,4 +1,3 @@
-import Sidebar from "./Sidebar";
 import { useLocation } from "react-router-dom";
 
 const menuItems = [

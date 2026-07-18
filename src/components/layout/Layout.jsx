@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import TimeCalculator from "../../pages/TimeCalculator";
-import DurationCalculator from "../../pages/DurationCalculator";
+import TimeCalculator from "@/pages/TimeCalculator";
+import DurationCalculator from "@/pages/DurationCalculator";
 
 function Layout() {
   return (
