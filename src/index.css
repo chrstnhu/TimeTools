@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  /* Background */
+  --background: #0f172a;
+  --surface: #1e293b;
+  --surface-hover: #334155;
+
+  /* Text */
+  --foreground: #f8fafc;
+  --muted: #cbd5e1;
+
+  /* Accent */
+  --primary: #0b367c;
+  --primary-hover: #1b52d2;
+
+  /* Border */
+  --border: #475569;
+
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
