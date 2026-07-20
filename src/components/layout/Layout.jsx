@@ -3,6 +3,7 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import TimeCalculator from "@/pages/TimeCalculator";
 import DurationCalculator from "@/pages/DurationCalculator";
+import TimeZoneCalculator from "@/pages/TimeZoneCalculator";
 
 function Layout() {
   return (
@@ -15,8 +16,11 @@ function Layout() {
         <main className="p-4">
           <Routes>
             <Route path="/time-calculator" element={<TimeCalculator />} />
-            <Route path="/duration-calculator" element={<DurationCalculator />} />
-
+            <Route
+              path="/duration-calculator"
+              element={<DurationCalculator />}
+            />
+            <Route path="/time-zone" element={<TimeZoneCalculator />} />
           </Routes>
         </main>
       </div>

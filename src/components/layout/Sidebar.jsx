@@ -14,7 +14,11 @@ import {
 const menuItems = [
   { name: "Home", path: "/", icon: Home },
   { name: "Time Calculator", path: "/time-calculator", icon: Clock },
-  { name: "Duration Calculator", path: "/duration-calculator", icon: ClockPlus },
+  {
+    name: "Duration Calculator",
+    path: "/duration-calculator",
+    icon: ClockPlus,
+  },
   { name: "Date Calculator", path: "/date-calculator", icon: Calendar },
   { name: "Age Calculator", path: "/age-calculator", icon: Cake },
   { name: "Time Zone", path: "/time-zone", icon: Globe },
@@ -32,9 +36,7 @@ function Sidebar() {
         {/* Header */}
         <div className="flex h-16 items-center justify-between px-4">
           {isOpen && (
-            <h2 className="text-xl font-bold text-white">
-              Time Tools
-            </h2>
+            <h2 className="text-xl font-bold text-white">Time Tools</h2>
           )}
 
           <button
@@ -62,9 +64,7 @@ function Sidebar() {
                     <Icon size={22} />
 
                     {isOpen && (
-                      <span className="whitespace-nowrap">
-                        {item.name}
-                      </span>
+                      <span className="whitespace-nowrap">{item.name}</span>
                     )}
                   </Link>
                 </li>

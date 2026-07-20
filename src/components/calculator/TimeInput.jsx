@@ -1,17 +1,8 @@
-import Input from "./Input";
+import Input from "../ui/Input";
 
-function InputTime({
-  value,
-  onChange,
-  min = 0,
-  max = 59,
-  ...props
-}) {
+function InputTime({ value, onChange, min = 0, max = 59, ...props }) {
   const handleChange = (e) => {
-    const newValue = Math.min(
-      max,
-      Math.max(min, Number(e.target.value) || 0)
-    );
+    const newValue = Math.min(max, Math.max(min, Number(e.target.value) || 0));
 
     onChange(newValue);
   };
@@ -28,21 +19,12 @@ function InputTime({
   );
 }
 
-
-function TimeInput({
-  label,
-  id,
-  value,
-  onChange,
-  maxHours = 23,
-}) {
+function TimeInput({ label, id, value, onChange, maxHours = 23 }) {
   return (
     <div>
-      <label htmlFor={`${id}-h`}>
-        {label}
-      </label>
+      <label htmlFor={`${id}-h`}>{label}</label>
 
-      <div className="flex items-center">
+      <div className="flex items-center align-center">
         <InputTime
           id={`${id}-h`}
           value={value.h}

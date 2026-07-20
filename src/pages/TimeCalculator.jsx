@@ -1,10 +1,8 @@
 import { useState } from "react";
 import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
 import { secondsToTime } from "@/utils/secondsToTime";
 import TimeInput from "@/components/calculator/TimeInput";
-
-import { RotateCcw, Plus, Minus, Save } from "lucide-react";
+import CalculatorButtons from "@/components/calculator/CalculatorButtons";
 
 function TimeCalculator() {
   const initialResult = {
@@ -26,7 +24,6 @@ function TimeCalculator() {
   const [result, setResult] = useState(initialResult);
 
   const handleCalculate = (selectedOperation) => {
-
     const seconds1 = time1.h * 3600 + time1.m * 60 + time1.s;
     const seconds2 = time2.h * 3600 + time2.m * 60 + time2.s;
 
@@ -55,86 +52,56 @@ function TimeCalculator() {
   };
 
   return (
-    <Card>
-      <div >
+    <div className="flex flex-col gap-4">
+      <Card>
+        <div>
+          <TimeInput
+            label="Time 1"
+            id="time1"
+            value={time1}
+            onChange={setTime1}
+            maxHours={999}
+          />
 
-        <TimeInput
-          label="Time 1"
-          id="time1"
-          value={time1}
-          onChange={setTime1}
-          maxHours={999}
-        />
+          <TimeInput
+            label="Time 2"
+            id="time2"
+            value={time2}
+            onChange={setTime2}
+            maxHours={999}
+          />
 
-        <TimeInput
-          label="Time 2"
-          id="time2"
-          value={time2}
-          onChange={setTime2}
-          maxHours={999}
-        />
+          <CalculatorButtons
+            onAdd={() => handleCalculate("+")}
+            onSubtract={() => handleCalculate("-")}
+            onReset={handleReset}
+            onKeep={handleKeep}
+          />
+        </div>
+      </Card>
 
-        <div className="flex gap-2 mt-4">
-          <div className="flex gap-2 my-4">
-            <Button
-              icon={Plus}
-              type="button"
-              onClick={() => {
-                handleCalculate("+");
-              }}
-            >
-              Add
-            </Button>
+      <Card>
+        <div className="flex flex-col">
+          <label htmlFor="result">Result:</label>
 
-            <Button
-              icon={Minus}
-              type="button"
-              onClick={() => {
-                handleCalculate("-");
-              }}
-            >
-              Subtract
-            </Button>
-
-            <Button icon={RotateCcw} type="button" onClick={handleReset}>
-              Reset
-            </Button>
-
-            <Button icon={Save} type="button" onClick={handleKeep}>
-              Keep time
-            </Button>
+          <div className="flex flex-row items-center">
+            <p>
+              {result.total.h} h {result.total.m.toString().padStart(2, "0")} m{" "}
+              {result.total.s.toString().padStart(2, "0")} s{" "}
+            </p>
           </div>
 
+          <div className="mt-4">
+            <h3>With days:</h3>
+
+            <p>
+              {result.days.d} d {result.days.h} h {result.days.m} m{" "}
+              {result.days.s} s
+            </p>
+          </div>
         </div>
-
-      </div>
-
-
-      <div className="flex flex-col mt-4">
-        <label htmlFor="result">Result:</label>
-
-        <div className="flex flex-row items-center">
-          <p> 
-            {result.total.h} h{" "}
-            {result.total.m.toString().padStart(2, "0")} m{" "}
-            {result.total.s.toString().padStart(2, "0")} s{" "}
-          </p>
-        </div>
-
-        <div className="mt-4">
-          <h3>With days:</h3>
-
-          <p>
-            {result.days.d} d{" "}
-            {result.days.h} h{" "}
-            {result.days.m} m{" "}
-            {result.days.s} s
-          </p>
-        </div>
-
-      </div>
-
-    </Card>
+      </Card>
+    </div>
   );
 }
 

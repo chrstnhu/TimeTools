@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
 import { secondsToTime } from "@/utils/secondsToTime";
-import { RotateCcw, Plus, Minus, Save } from "lucide-react";
 import TimeInput from "@/components/calculator/TimeInput";
+import CalculatorButtons from "@/components/calculator/CalculatorButtons";
 
 function DurationCalculator() {
   const initialResult = {
@@ -53,80 +52,50 @@ function DurationCalculator() {
   };
 
   return (
-    <Card>
-      <div >
+    <div className="flex flex-col gap-4">
+      <Card>
+        <div>
+          <TimeInput
+            label="Time 1"
+            id="time1"
+            value={time1}
+            onChange={setTime1}
+            maxHours={23}
+          />
 
-        <TimeInput
-          label="Time 1"
-          id="time1"
-          value={time1}
-          onChange={setTime1}
-          maxHours={23}
-        />
+          <TimeInput
+            label="Time 2"
+            id="time2"
+            value={time2}
+            onChange={setTime2}
+            maxHours={999}
+          />
 
-        <TimeInput
-          label="Time 2"
-          id="time2"
-          value={time2}
-          onChange={setTime2}
-          maxHours={999}
-        />
-
-        <div className="flex gap-2 mt-4">
-          <div className="flex gap-2 my-4">
-            <Button
-              icon={Plus}
-              type="button"
-              onClick={() => {
-                handleCalculate("+");
-              }}
-            >
-              Add
-            </Button>
-
-            <Button
-              icon={Minus}
-              type="button"
-              onClick={() => {
-                handleCalculate("-");
-              }}
-            >
-              Subtract
-            </Button>
-
-            <Button icon={RotateCcw} type="button" onClick={handleReset}>
-              Reset
-            </Button>
-
-            <Button icon={Save} type="button" onClick={handleKeep}>
-              Keep time
-            </Button>
+          <CalculatorButtons
+            onAdd={() => handleCalculate("+")}
+            onSubtract={() => handleCalculate("-")}
+            onReset={handleReset}
+            onKeep={handleKeep}
+          />
+        </div>
+      </Card>
+      <Card>
+        <div className="flex flex-col">
+          <label htmlFor="result">Result:</label>
+          <div className="mt-4">
+            <p className="text-lg font-bold flex flex-row gap-2 items-center">
+              {result.days.d} d {result.days.h} h {result.days.m} m{" "}
+              {result.days.s} s{" "}
+              {result.days.d > 0 && (
+                <p className="text-sm text-gray-500">
+                  (+{result.days.d} {result.days.d === 1 ? "day" : "days"})
+                </p>
+              )}
+            </p>
           </div>
-
         </div>
-
-      </div>
-
-
-      <div className="flex flex-col mt-4">
-        <label htmlFor="result">Result:</label>
-        <div className="mt-4">
-          <p className="text-lg font-bold flex flex-row gap-2 items-center">
-            {result.days.d} d{" "}
-            {result.days.h} h{" "}
-            {result.days.m} m{" "}
-            {result.days.s} s{" "}
-            {result.days.d > 0 && (
-              <p className="text-sm text-gray-500">
-                (+{result.days.d} {result.days.d === 1 ? "day" : "days"})
-              </p>
-            )}
-          </p>
-        </div>
-
-      </div>
-
-    </Card>
+      </Card>
+    </div>
   );
 }
 
