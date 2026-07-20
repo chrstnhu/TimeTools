@@ -1,95 +1,95 @@
 import { useState } from "react";
-import Card from "@/components/ui/Card";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
+import Button from "@/components/ui/Button";
 
 function DateCalculator() {
-  const initialResult = {
-    total: {
-      h: 0,
-      m: 0,
-      s: 0,
-    },
-    days: {
-      d: 0,
-      h: 0,
-      m: 0,
-      s: 0,
-    },
-  };
+  const [range, setRange] = useState();
+  function getDaysDifference() {
+    if (!range?.from || !range?.to) return null;
 
-  const [time1, setTime1] = useState({ h: 0, m: 0, s: 0 });
-  const [time2, setTime2] = useState({ h: 0, m: 0, s: 0 });
-  const [result, setResult] = useState(initialResult);
+    const diffTime = Math.abs(range.to - range.from) + 1;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
 
-  const handleCalculate = (selectedOperation) => {
-    const seconds1 = time1.h * 3600 + time1.m * 60 + time1.s;
-    const seconds2 = time2.h * 3600 + time2.m * 60 + time2.s;
-
-    let totalSeconds;
-    if (selectedOperation === "+") {
-      totalSeconds = seconds1 + seconds2;
-    } else if (selectedOperation === "-") {
-      totalSeconds = seconds1 - seconds2;
-    }
-
-    totalSeconds = Math.max(0, totalSeconds);
-
-    setResult(secondsToTime(totalSeconds));
-  };
+  const days = getDaysDifference();
 
   const handleReset = () => {
-    setTime1({ h: 0, m: 0, s: 0 });
-    setTime2({ h: 0, m: 0, s: 0 });
-    setResult(initialResult);
+    setRange(null);
   };
 
-  const handleKeep = () => {
-    setTime1(result.total);
-    setTime2({ h: 0, m: 0, s: 0 });
-    setResult(initialResult);
-  };
-
+  const hasResult = days !== null;
+  
   return (
-    <Card>
-      <div>
-        <TimeInput
-          label="Time 1"
-          id="time1"
-          value={time1}
-          onChange={setTime1}
-          maxHours={23}
-        />
+    <div className="bg-[var(--background)] p-5 rounded-lg text-white">
+      <label>
+        Select a start and end date to calculate the number of days (include
+        start and end date):
+      </label>
 
-        <TimeInput
-          label="Time 2"
-          id="time2"
-          value={time2}
-          onChange={setTime2}
-          maxHours={999}
-        />
+      <DayPicker
+        captionLayout="dropdown"
+        navLayout="after"
+        mode="range"
+        selected={range}
+        onSelect={setRange}
+        classNames={{
+          months: "flex justify-center",
+          caption: "text-lg font-bold text-white",
 
-        <CalculatorButtons
-          onAdd={() => handleCalculate("+")}
-          onSubtract={() => handleCalculate("-")}
-          onReset={handleReset}
-          onKeep={handleKeep}
-        />
-      </div>
+          weekday: "text-sm font-medium text-gray-400",
 
-      <div className="flex flex-col mt-4">
-        <label htmlFor="result">Result:</label>
-        <div className="mt-4">
-          <p className="text-lg font-bold flex flex-row gap-2 items-center">
-            {result.days.d} d {result.days.h} h {result.days.m} m{" "}
-            {result.days.s} s{" "}
-            {result.days.d > 0 && (
-              <p className="text-sm text-gray-500">
-                (+{result.days.d} {result.days.d === 1 ? "day" : "days"})
+          today: "border border-white-400",
+
+          day: "text-white hover:bg-blue-600 rounded-full",
+          range_start: "bg-blue-800 text-white",
+          range_middle: "bg-blue-100 text-white ",
+          range_end: "bg-blue-800 text-white",
+
+          selected: "bg-blue-500 text-white rounded-full",
+
+          outside: "text-gray-600",
+
+          footer: "text-center text-gray-400",
+        }}
+      />
+
+      {hasResult && (
+        <div className="flex flex-col items-center text-gray-400 gap-2">
+          <div className="flex flex-row gap-2 items-center">
+            {range?.from && (
+              <p>
+                From
+                <span className="text-white ml-1">
+                  {range.from.toLocaleDateString()}
+                </span>
               </p>
             )}
-          </p>
+
+            {range?.to && (
+              <p>
+                to
+                <span className="text-white ml-1">
+                  {range.to.toLocaleDateString()}
+                </span>
+              </p>
+            )}
+            {days !== null && (
+              <p className="text-xl font-bold text-white">({days} days)</p>
+            )}
+          </div>
         </div>
+      )}
+      <div className="flex flex-col items-center text-gray-400 gap-2">
+        <Button
+          type="button"
+          onClick={handleReset}
+          className="ml-2 text-blue-400"
+        >
+          Reset
+        </Button>
       </div>
-    </Card>
+    </div>
   );
 }
 

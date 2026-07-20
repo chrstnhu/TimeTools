@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import {
   Home,
   Clock,
-  Calendar,
+  Logs,
+  Calendars,
   Cake,
   Globe,
   Menu,
   X,
   ClockPlus,
+  Timer,
 } from "lucide-react";
 
 const menuItems = [
@@ -19,9 +21,12 @@ const menuItems = [
     path: "/duration-calculator",
     icon: ClockPlus,
   },
-  { name: "Date Calculator", path: "/date-calculator", icon: Calendar },
+  { name: "Day Calculator", path: "/day-calculator", icon: Logs },
+  { name: "Date Calculator", path: "/date-calculator", icon: Calendars },
   { name: "Age Calculator", path: "/age-calculator", icon: Cake },
   { name: "Time Zone", path: "/time-zone", icon: Globe },
+  { name: "Chronometer", path: "/chronometer", icon: Timer },
+
 ];
 
 function Sidebar() {

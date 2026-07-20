@@ -4,8 +4,12 @@ const menuItems = [
   { name: "Home", path: "/" },
   { name: "Time Calculator", path: "/time-calculator" },
   { name: "Date Calculator", path: "/date-calculator" },
+  { name: "Duration Calculator", path: "/duration-calculator" },
+  { name: "Day Calculator", path: "/day-calculator" },
   { name: "Age Calculator", path: "/age-calculator" },
   { name: "Time Zone", path: "/time-zone" },
+  { name: "Chronometer", path: "/chronometer" },
+
 ];
 
 function Header() {

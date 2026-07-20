@@ -4,6 +4,11 @@ import Sidebar from "./Sidebar";
 import TimeCalculator from "@/pages/TimeCalculator";
 import DurationCalculator from "@/pages/DurationCalculator";
 import TimeZoneCalculator from "@/pages/TimeZoneCalculator";
+import DateCalculator from "@/pages/DateCalculator";
+import DayCalculator from "@/pages/DayCalculator";
+import AgeCalculator from "@/pages/AgeCalculator";
+import Chronometer from "@/pages/Chronometer";
+
 
 function Layout() {
   return (
@@ -21,6 +26,11 @@ function Layout() {
               element={<DurationCalculator />}
             />
             <Route path="/time-zone" element={<TimeZoneCalculator />} />
+            <Route path="/date-calculator" element={<DateCalculator />} />
+            <Route path="/day-calculator" element={<DayCalculator />} />
+            <Route path="/age-calculator" element={<AgeCalculator />} />
+            <Route path="/chronometer" element={<Chronometer />} />
+
           </Routes>
         </main>
       </div>

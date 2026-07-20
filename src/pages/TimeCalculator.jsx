@@ -22,6 +22,7 @@ function TimeCalculator() {
   const [time1, setTime1] = useState({ h: 0, m: 0, s: 0 });
   const [time2, setTime2] = useState({ h: 0, m: 0, s: 0 });
   const [result, setResult] = useState(initialResult);
+  const [hasResult, setHasResult] = useState(false);
 
   const handleCalculate = (selectedOperation) => {
     const seconds1 = time1.h * 3600 + time1.m * 60 + time1.s;
@@ -36,12 +37,14 @@ function TimeCalculator() {
 
     totalSeconds = Math.max(0, totalSeconds);
 
+    setHasResult(true);
     setResult(secondsToTime(totalSeconds));
   };
 
   const handleReset = () => {
     setTime1({ h: 0, m: 0, s: 0 });
     setTime2({ h: 0, m: 0, s: 0 });
+    setHasResult(false);
     setResult(initialResult);
   };
 
@@ -80,27 +83,29 @@ function TimeCalculator() {
         </div>
       </Card>
 
-      <Card>
-        <div className="flex flex-col">
-          <label htmlFor="result">Result:</label>
+      {hasResult && (
+        <Card>
+          <div className="flex flex-col">
+            <label htmlFor="result">Result:</label>
 
-          <div className="flex flex-row items-center">
-            <p>
-              {result.total.h} h {result.total.m.toString().padStart(2, "0")} m{" "}
-              {result.total.s.toString().padStart(2, "0")} s{" "}
-            </p>
+            <div className="flex flex-row items-center">
+              <p>
+                {result.total.h} h {result.total.m.toString().padStart(2, "0")}{" "}
+                m {result.total.s.toString().padStart(2, "0")} s{" "}
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <h3>With days:</h3>
+
+              <p>
+                {result.days.d} d {result.days.h} h {result.days.m} m{" "}
+                {result.days.s} s
+              </p>
+            </div>
           </div>
-
-          <div className="mt-4">
-            <h3>With days:</h3>
-
-            <p>
-              {result.days.d} d {result.days.h} h {result.days.m} m{" "}
-              {result.days.s} s
-            </p>
-          </div>
-        </div>
-      </Card>
+        </Card>
+      )}
     </div>
   );
 }

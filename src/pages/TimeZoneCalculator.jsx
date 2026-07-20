@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ClockDisplay from "@/components/ui/ClockDisplay";
 import TimeZoneInput from "@/components/calculator/TimeZoneInput";
+import { Switch } from "@/components/ui/switch";
 
 const timeZones = [
   { city: "London", zone: "Europe/London" },
@@ -17,7 +18,7 @@ const timeZones = [
 
 function TimeZone() {
   const [date, setDate] = useState(new Date());
-  const [is12Hours, setIs12Hours] = useState(true);
+  const [is12Hours, setIs12Hours] = useState(false);
   const [customTime, setCustomTime] = useState(null);
   const displayDate = customTime ?? date;
 
@@ -104,18 +105,15 @@ function TimeZone() {
 
   return (
     <div className="clock text-white text-center align-center">
-      <label> Try time in different countries :</label>
+      <label> Try time in different countries</label>
       <TimeZoneInput setCustomTime={setCustomTime} />
 
-      <label>
-        <input
-          type="checkbox"
-          checked={is12Hours}
-          onChange={(e) => setIs12Hours(e.target.checked)}
-        />
+      <div className="flex items-center justify-center space-x-2">
+        <span className={`text-sm ${!is12Hours ? 'text-white font-bold text-xl' : 'text-gray-500'}`}>24h</span>
+        <Switch checked={is12Hours} onCheckedChange={setIs12Hours} />
+        <span className={`text-sm ${is12Hours ? 'text-white font-bold text-xl' : 'text-gray-500'}`}>12h</span>
+      </div>
 
-        <span className="ml-2 text-sm">12/24 hour format</span>
-      </label>
       <section
         className="
         grid 

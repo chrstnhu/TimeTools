@@ -22,6 +22,7 @@ function DurationCalculator() {
   const [time1, setTime1] = useState({ h: 0, m: 0, s: 0 });
   const [time2, setTime2] = useState({ h: 0, m: 0, s: 0 });
   const [result, setResult] = useState(initialResult);
+  const [hasResult, setHasResult] = useState(false);
 
   const handleCalculate = (selectedOperation) => {
     const seconds1 = time1.h * 3600 + time1.m * 60 + time1.s;
@@ -36,12 +37,14 @@ function DurationCalculator() {
 
     totalSeconds = Math.max(0, totalSeconds);
 
+    setHasResult(true);
     setResult(secondsToTime(totalSeconds));
   };
 
   const handleReset = () => {
     setTime1({ h: 0, m: 0, s: 0 });
     setTime2({ h: 0, m: 0, s: 0 });
+    setHasResult(false);
     setResult(initialResult);
   };
 
@@ -79,22 +82,25 @@ function DurationCalculator() {
           />
         </div>
       </Card>
-      <Card>
-        <div className="flex flex-col">
-          <label htmlFor="result">Result:</label>
-          <div className="mt-4">
-            <p className="text-lg font-bold flex flex-row gap-2 items-center">
-              {result.days.d} d {result.days.h} h {result.days.m} m{" "}
-              {result.days.s} s{" "}
-              {result.days.d > 0 && (
-                <p className="text-sm text-gray-500">
-                  (+{result.days.d} {result.days.d === 1 ? "day" : "days"})
-                </p>
-              )}
-            </p>
+
+      {hasResult && (
+        <Card>
+          <div className="flex flex-col">
+            <label htmlFor="result">Result:</label>
+            <div className="mt-4">
+              <p className="text-lg font-bold flex flex-row gap-2 items-center">
+                {result.days.d} d {result.days.h} h {result.days.m} m{" "}
+                {result.days.s} s{" "}
+                {result.days.d > 0 && (
+                  <p className="text-sm text-gray-500">
+                    (+{result.days.d} {result.days.d === 1 ? "day" : "days"})
+                  </p>
+                )}
+              </p>
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      )}
     </div>
   );
 }
