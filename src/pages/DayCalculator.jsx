@@ -4,29 +4,38 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 
 function DayCalculator() {
-  const [days, setDays] = useState(0);
-  const [months, setMonths] = useState(0);
-  const [years, setYears] = useState(0);
-  const [result, setResult] = useState({
+  const initialResult = {
     years: 0,
     months: 0,
     days: 0,
     totalDays: 0,
-  });
+  };
+
+  const [days, setDays] = useState(0);
+  const [months, setMonths] = useState(0);
+  const [years, setYears] = useState(0);
+
+  const [result, setResult] = useState(initialResult);
   const [hasResult, setHasResult] = useState(false);
 
-  function normalizeDuration(totalDays) {
+  const normalizeDuration = (totalDays) => {
     const years = Math.floor(totalDays / 365);
+
     const remainingDaysAfterYears = totalDays % 365;
+
     const months = Math.floor(remainingDaysAfterYears / 30);
+
     const days = remainingDaysAfterYears % 30;
 
-    setHasResult(true);
-    return { years, months, days };
-  }
+    return {
+      years,
+      months,
+      days,
+    };
+  };
 
   const handleConvert = () => {
-    const totalDays = days + months * 30 + years * 365;
+    const totalDays = Number(days) + Number(months) * 30 + Number(years) * 365;
 
     const normalized = normalizeDuration(totalDays);
 
@@ -34,87 +43,118 @@ function DayCalculator() {
       ...normalized,
       totalDays,
     });
+
+    setHasResult(true);
   };
 
   const handleReset = () => {
     setDays(0);
     setMonths(0);
     setYears(0);
-    setResult({
-      years: 0,
-      months: 0,
-      days: 0,
-      totalDays: 0,
-    });
+    setResult(initialResult);
     setHasResult(false);
+  };
+
+  const handleInput = (setter) => (e) => {
+    setter(Math.max(0, Number(e.target.value)));
   };
 
   return (
     <div className="flex flex-col gap-4">
+      {/* INPUT */}
       <Card>
-        <div>
-          <div>
-            <label>Day(s)</label>
-            <Input
-              type="number"
-              min="0"
-              value={days}
-              onChange={(e) => setDays(parseInt(e.target.value) || 0)}
-            ></Input>
-          </div>
-          <div>
-            <label>Month(s)</label>
-            <Input
-              type="number"
-              min="0"
-              value={months}
-              onChange={(e) => setMonths(parseInt(e.target.value) || 0)}
-            ></Input>
-          </div>
-          <div>
-            <label>Year(s)</label>
-            <Input
-              type="number"
-              min="0"
-              value={years}
-              onChange={(e) => setYears(parseInt(e.target.value) || 0)}
-            ></Input>
-          </div>
-        </div>
+        <div className="flex flex-col gap-4">
+          <h2 className="text-xl font-bold text-center">Convert duration</h2>
 
-        <div className="flex flex-row gap-2">
-          <Button onClick={handleConvert}>Convert</Button>
-          <Button onClick={handleReset}>Reset</Button>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="font-semibold block mb-1 text-center">
+                Days
+              </label>
+
+              <Input
+                className="text-center w-full"
+                type="number"
+                min="0"
+                value={days}
+                onChange={handleInput(setDays)}
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold block mb-1 text-center">
+                Months
+              </label>
+
+              <Input
+                className="text-center w-full"
+                type="number"
+                min="0"
+                value={months}
+                onChange={handleInput(setMonths)}
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold block mb-1 text-center">
+                Years
+              </label>
+
+              <Input
+                className="text-center w-full"
+                type="number"
+                min="0"
+                value={years}
+                onChange={handleInput(setYears)}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-center gap-3 mt-2">
+            <Button onClick={handleConvert}>Convert</Button>
+            <Button onClick={handleReset}>Reset</Button>
+          </div>
         </div>
       </Card>
+
       {hasResult && (
         <Card>
-          <label className="font-bold">Equivalent duration:</label>
+          <div className="flex flex-col gap-5">
+            <h2 className="text-xl font-bold text-center">Result</h2>
 
-          <p>
-            {result.years} year(s), {result.months} month(s), {result.days}{" "}
-            day(s)
-          </p>
+            <Card className="w-full mx-auto">
+              <p className="text-3xl font-bold tracking-wider">
+                {result.years}y {result.months}m {result.days}d
+              </p>
+            </Card>
 
-          <hr className="my-3" />
-          <div className="flex flex-col gap-2">
-            <p>Day(s)</p>
-            <Card>{result.totalDays}</Card>
-            <p>
-              Month(s)
-              <span className="ml-1 text-sm text-gray-400">
-                (Based on 1 month = 30 days)
-              </span>
-            </p>
+            <div>
+              <p className="font-semibold mb-2">Equivalent</p>
 
-            <Card>{Math.floor(result.totalDays / 30)}</Card>
-            <p>
-              Year(s)
-              <span className="ml-1 text-sm text-gray-400">
-                (Based on 1 year = 365 days)
-              </span>
-            </p>
-            <Card>{Math.floor(result.totalDays / 365)}</Card>
+              <div className="grid grid-cols-3 gap-3">
+                <Card>
+                  <p className="text-sm text-gray-400">Total Days</p>
+
+                  <p className="text-2xl font-bold">{result.totalDays}</p>
+                </Card>
+
+                <Card>
+                  <p className="text-sm text-gray-400">Total Months</p>
+
+                  <p className="text-2xl font-bold">
+                    {Math.floor(result.totalDays / 30)}
+                  </p>
+                </Card>
+
+                <Card>
+                  <p className="text-sm text-gray-400">Total Years</p>
+
+                  <p className="text-2xl font-bold">
+                    {Math.floor(result.totalDays / 365)}
+                  </p>
+                </Card>
+              </div>
+            </div>
           </div>
         </Card>
       )}

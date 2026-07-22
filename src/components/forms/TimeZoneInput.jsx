@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TimeInput from "@/components/calculator/TimeInput";
+import TimeInput from "@/components/forms/TimeInput";
 import Button from "@/components/ui/Button";
 
 function TimeZoneInput({ setCustomTime }) {
@@ -21,22 +21,12 @@ function TimeZoneInput({ setCustomTime }) {
   };
 
   return (
-    <div
-      className={`
-        font-bold
-        flex
-        items-center
-        align-center
-        self-center
-        justify-center
-        flex-wrap
-        gap-1
-      `}
-    >
+    <div className="flex flex-col items-center gap-3">
       <TimeInput id="time1" value={time1} onChange={setTime1} maxHours={23} />
 
-      <div className="flex flex-row gap-2 mx-4">
+      <div className="flex flex-row items-center gap-2">
         <Button onClick={handleCalculate}>Try</Button>
+
         <Button onClick={() => setCustomTime(null)}>Reset</Button>
       </div>
     </div>

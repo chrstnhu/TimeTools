@@ -8,6 +8,7 @@ import DateCalculator from "@/pages/DateCalculator";
 import DayCalculator from "@/pages/DayCalculator";
 import AgeCalculator from "@/pages/AgeCalculator";
 import Chronometer from "@/pages/Chronometer";
+import HomePage from "@/pages/HomePage";
 
 
 function Layout() {
@@ -20,6 +21,8 @@ function Layout() {
 
         <main className="p-4">
           <Routes>
+            <Route path="/" element={<HomePage />} />
+
             <Route path="/time-calculator" element={<TimeCalculator />} />
             <Route
               path="/duration-calculator"

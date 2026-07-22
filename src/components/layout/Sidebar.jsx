@@ -1,33 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Home,
-  Clock,
-  Logs,
-  Calendars,
-  Cake,
-  Globe,
-  Menu,
-  X,
-  ClockPlus,
-  Timer,
-} from "lucide-react";
-
-const menuItems = [
-  { name: "Home", path: "/", icon: Home },
-  { name: "Time Calculator", path: "/time-calculator", icon: Clock },
-  {
-    name: "Duration Calculator",
-    path: "/duration-calculator",
-    icon: ClockPlus,
-  },
-  { name: "Day Calculator", path: "/day-calculator", icon: Logs },
-  { name: "Date Calculator", path: "/date-calculator", icon: Calendars },
-  { name: "Age Calculator", path: "/age-calculator", icon: Cake },
-  { name: "Time Zone", path: "/time-zone", icon: Globe },
-  { name: "Chronometer", path: "/chronometer", icon: Timer },
-
-];
+import { Menu, X } from "lucide-react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
+import { menuItems } from "@/constants/menuItems";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,18 +10,18 @@ function Sidebar() {
   return (
     <div className="fixed left-0 top-0 z-50 h-screen w-16">
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-screen flex-col bg-[var(--background)] shadow-lg transition-all duration-300
+        className={`fixed left-0 top-0 z-50 flex h-screen flex-col justify-between bg-[var(--background)] shadow-lg transition-all duration-300
         ${isOpen ? "w-60" : "w-16"}`}
       >
         {/* Header */}
-        <div className="flex h-16 items-center justify-between px-4">
+        <div className="flex h-16 items-center px-4">
           {isOpen && (
-            <h2 className="text-xl font-bold text-white">Time Tools</h2>
+            <h2 className="text-xl font-bold text-[var(--text)]">Time Tools</h2>
           )}
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="rounded-md p-2 text-white hover:bg-white/10"
+            className="rounded-md p-2 text-[var(--text)] hover:bg-white/10"
           >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -63,7 +38,7 @@ function Sidebar() {
                   <Link
                     to={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center rounded-lg p-3 text-white transition-colors hover:bg-white/10
+                    className={`flex items-center rounded-2xl p-3 text-[var(--text)]  transition-colors hover:bg-[var(--surface-hover)]
                     ${isOpen ? "gap-4" : "justify-center"}`}
                   >
                     <Icon size={22} />
@@ -77,6 +52,10 @@ function Sidebar() {
             })}
           </ul>
         </nav>
+
+        <div>
+          <ThemeToggle isOpen={isOpen} />
+        </div>
       </aside>
     </div>
   );

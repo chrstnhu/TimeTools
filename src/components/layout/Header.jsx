@@ -9,7 +9,6 @@ const menuItems = [
   { name: "Age Calculator", path: "/age-calculator" },
   { name: "Time Zone", path: "/time-zone" },
   { name: "Chronometer", path: "/chronometer" },
-
 ];
 
 function Header() {
@@ -19,7 +18,7 @@ function Header() {
     menuItems.find((item) => item.path === location.pathname) || menuItems[0];
 
   return (
-    <header className="relative z-10 flex h-16 items-center border-b-1 border-[var(--background)] bg-[var(--background)]/90 p-4 text-white">
+    <header className="relative z-10 flex h-16 items-center border-b-1 border-[var(--background)] bg-[var(--primary)]/20 p-4 text-[var(--text)]">
       <div className="flex items-center gap-2">
         <h2 className="text-2xl font-bold">{currentPage.name}</h2>
       </div>

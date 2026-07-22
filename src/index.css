@@ -1,10 +1,15 @@
-@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap");
 
+@import "tailwindcss";
 :root {
   font-family: Inter, system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+
+  /* Font */
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 
   /* Background */
   --background: #0f172a;
@@ -12,6 +17,7 @@
   --surface-hover: #334155;
 
   /* Text */
+  --text: #f8fafc;
   --foreground: #f8fafc;
   --muted: #cbd5e1;
 
@@ -24,8 +30,34 @@
 
 }
 
+/* LIGHT MODE */
+.light {
+  /* Background */
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-hover: #c3dcf4;
+
+  /* Text */
+  --foreground: #0f172a;
+  --text: #1e293b;
+  --muted: #64748b;
+
+  /* Accent */
+  --primary: #4f6fa5;
+  --primary-hover: #3f5f93;
+  --primary-foreground: #ffffff;
+
+
+  /* Border */
+  --border: #cbd5e1;
+}
+
+
 body {
   margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
 }
 
 #root {

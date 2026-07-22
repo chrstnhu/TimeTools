@@ -3,7 +3,6 @@ import Input from "../ui/Input";
 function InputTime({ value, onChange, min = 0, max = 59, ...props }) {
   const handleChange = (e) => {
     const newValue = Math.min(max, Math.max(min, Number(e.target.value) || 0));
-
     onChange(newValue);
   };
 
@@ -14,6 +13,7 @@ function InputTime({ value, onChange, min = 0, max = 59, ...props }) {
       min={min}
       max={max}
       onChange={handleChange}
+      className="w-full text-center"
       {...props}
     />
   );
@@ -22,9 +22,17 @@ function InputTime({ value, onChange, min = 0, max = 59, ...props }) {
 function TimeInput({ label, id, value, onChange, maxHours = 23 }) {
   return (
     <div>
-      <label htmlFor={`${id}-h`}>{label}</label>
+      <label className="font-semibold text-lg" htmlFor={`${id}-h`}>
+        {label}
+      </label>
 
-      <div className="flex items-center align-center">
+      <div className="grid grid-cols-3 gap-4 text-center text-sm text-gray-400">
+        <span>Hours</span>
+        <span>Minutes</span>
+        <span>Seconds</span>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
         <InputTime
           id={`${id}-h`}
           value={value.h}
@@ -37,7 +45,6 @@ function TimeInput({ label, id, value, onChange, maxHours = 23 }) {
             })
           }
         />
-        <span>h</span>
 
         <InputTime
           id={`${id}-m`}
@@ -51,7 +58,6 @@ function TimeInput({ label, id, value, onChange, maxHours = 23 }) {
             })
           }
         />
-        <span>m</span>
 
         <InputTime
           id={`${id}-s`}
@@ -65,7 +71,6 @@ function TimeInput({ label, id, value, onChange, maxHours = 23 }) {
             })
           }
         />
-        <span>s</span>
       </div>
     </div>
   );

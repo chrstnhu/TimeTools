@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
+import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 
 function DateCalculator() {
@@ -13,82 +14,75 @@ function DateCalculator() {
   }
 
   const days = getDaysDifference();
+  const hasResult = days !== null;
 
   const handleReset = () => {
-    setRange(null);
+    setRange(undefined);
   };
 
-  const hasResult = days !== null;
-  
   return (
-    <div className="bg-[var(--background)] p-5 rounded-lg text-white">
-      <label>
-        Select a start and end date to calculate the number of days (include
-        start and end date):
-      </label>
+    <div>
+      <Card>
+        <label>Select a start and end date (include start and end date):</label>
 
-      <DayPicker
-        captionLayout="dropdown"
-        navLayout="after"
-        mode="range"
-        selected={range}
-        onSelect={setRange}
-        classNames={{
-          months: "flex justify-center",
-          caption: "text-lg font-bold text-white",
+        <DayPicker
+          captionLayout="dropdown"
+          navLayout="after"
+          mode="range"
+          selected={range}
+          onSelect={setRange}
+          classNames={{
+            months: "flex justify-center",
+            caption: "text-lg font-bold text-[var(--text)]",
 
-          weekday: "text-sm font-medium text-gray-400",
+            weekday: "text-sm font-medium text-gray-400",
 
-          today: "border border-white-400",
+            today: "border border-white-400",
 
-          day: "text-white hover:bg-blue-600 rounded-full",
-          range_start: "bg-blue-800 text-white",
-          range_middle: "bg-blue-100 text-white ",
-          range_end: "bg-blue-800 text-white",
+            day: "text-[var(--text)] hover:bg-[var(--primary)] rounded-full",
+            range_start: "bg-[var(--primary)] text-[var(--primary-foreground)]",
+            range_middle:
+              "bg-[var(--primary)]/50  text-[var(--primary-foreground)] ",
+            range_end: "bg-[var(--primary)] text-[var(--primary-foreground)]",
 
-          selected: "bg-blue-500 text-white rounded-full",
+            selected:
+              "bg-[var(--primary)]  text-[var(--primary-foreground)] rounded-full",
 
-          outside: "text-gray-600",
+            outside: "text-gray-600",
+          }}
+        />
 
-          footer: "text-center text-gray-400",
-        }}
-      />
+        <div className="flex justify-center mt-6">
+          <Button onClick={handleReset}>Reset</Button>
+        </div>
+      </Card>
 
       {hasResult && (
-        <div className="flex flex-col items-center text-gray-400 gap-2">
-          <div className="flex flex-row gap-2 items-center">
-            {range?.from && (
-              <p>
-                From
-                <span className="text-white ml-1">
-                  {range.from.toLocaleDateString()}
-                </span>
-              </p>
-            )}
+        <Card className="mt-4">
+          <h2 className="text-xl font-bold mb-4">Result</h2>
 
-            {range?.to && (
-              <p>
-                to
-                <span className="text-white ml-1">
-                  {range.to.toLocaleDateString()}
-                </span>
-              </p>
-            )}
-            {days !== null && (
-              <p className="text-xl font-bold text-white">({days} days)</p>
-            )}
+          <Card className="text-center">
+            <p className="text-3xl font-bold text-[var(--text-color)]">
+              {days}
+              <span className="text-lg ml-2 text-gray-400">day(s)</span>
+            </p>
+          </Card>
+
+          <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="rounded-2xl bg-[var(--surface)] p-4 text-center">
+              <p className="text-xs text-gray-400">From</p>
+
+              <p className="font-semibold">{range.from.toLocaleDateString()}</p>
+            </div>
+
+            <div className="rounded-2xl bg-[var(--surface)] p-4 text-center">
+              <p className="text-xs text-gray-400">To</p>
+
+              <p className="font-semibold">{range.to.toLocaleDateString()}</p>
+            </div>
           </div>
-        </div>
+        </Card>
       )}
-      <div className="flex flex-col items-center text-gray-400 gap-2">
-        <Button
-          type="button"
-          onClick={handleReset}
-          className="ml-2 text-blue-400"
-        >
-          Reset
-        </Button>
-      </div>
     </div>
   );
 }

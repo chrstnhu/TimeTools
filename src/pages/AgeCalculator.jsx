@@ -1,107 +1,110 @@
 import { useState } from "react";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
+import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import { secondsToTime } from "@/utils/secondsToTime";
-import TimeInput from "@/components/calculator/TimeInput";
-import CalculatorButtons from "@/components/calculator/CalculatorButtons";
+import { calculateAge } from "@/utils/calculateAge";
 
-function TimeCalculator() {
-  const initialResult = {
-    total: {
-      h: 0,
-      m: 0,
-      s: 0,
-    },
-    days: {
-      d: 0,
-      h: 0,
-      m: 0,
-      s: 0,
-    },
-  };
+function AgeCalculator() {
+  const [selected, setSelected] = useState(null);
 
-  const [time1, setTime1] = useState({ h: 0, m: 0, s: 0 });
-  const [time2, setTime2] = useState({ h: 0, m: 0, s: 0 });
-  const [result, setResult] = useState(initialResult);
-  const [hasResult, setHasResult] = useState(false);
+  const age = selected ? calculateAge(selected) : null;
 
-  const handleCalculate = (selectedOperation) => {
-    const seconds1 = time1.h * 3600 + time1.m * 60 + time1.s;
-    const seconds2 = time2.h * 3600 + time2.m * 60 + time2.s;
+  const isInvalidDate =
+    age && (age.days < 0 || age.months < 0 || age.years < 0);
 
-    let totalSeconds;
-    if (selectedOperation === "+") {
-      totalSeconds = seconds1 + seconds2;
-    } else if (selectedOperation === "-") {
-      totalSeconds = seconds1 - seconds2;
-    }
-
-    totalSeconds = Math.max(0, totalSeconds);
-
-    setHasResult(true);
-    setResult(secondsToTime(totalSeconds));
-  };
+  const totalDays = selected
+    ? Math.floor((new Date() - selected) / (1000 * 60 * 60 * 24))
+    : null;
 
   const handleReset = () => {
-    setTime1({ h: 0, m: 0, s: 0 });
-    setTime2({ h: 0, m: 0, s: 0 });
-    setHasResult(false);
-    setResult(initialResult);
-  };
-
-  const handleKeep = () => {
-    setTime1(result.total);
-    setTime2({ h: 0, m: 0, s: 0 });
-    setResult(initialResult);
+    setSelected(null);
   };
 
   return (
     <div className="flex flex-col gap-4">
       <Card>
-        <div>
-          <TimeInput
-            label="Time 1"
-            id="time1"
-            value={time1}
-            onChange={setTime1}
-            maxHours={999}
-          />
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="font-semibold">Select your birth date</label>
 
-          <TimeInput
-            label="Time 2"
-            id="time2"
-            value={time2}
-            onChange={setTime2}
-            maxHours={999}
-          />
+            <p className="text-sm text-gray-400">
+              Choose your date of birth to calculate your age.
+            </p>
+          </div>
 
-          <CalculatorButtons
-            onAdd={() => handleCalculate("+")}
-            onSubtract={() => handleCalculate("-")}
-            onReset={handleReset}
-            onKeep={handleKeep}
-          />
+          <div className="flex justify-center">
+            <DayPicker
+              captionLayout="dropdown"
+              navLayout="after"
+              mode="single"
+              selected={selected}
+              onSelect={setSelected}
+              disabled={{ after: new Date() }}
+              classNames={{
+                months: "flex justify-center",
+
+                caption: "text-lg font-bold text-[var(--text)]",
+
+                weekday: "text-sm font-medium text-gray-400",
+
+                today: "border border-blue-400",
+
+                day: "text-[var(--text-foreground)] hover:bg-[var(--primary)] rounded-full",
+
+                selected:
+                  "bg-[var(--primary)] text-[var(--primary-foreground)] rounded-full",
+
+                outside: "text-gray-600",
+              }}
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <Button type="button" onClick={handleReset}>
+              Reset
+            </Button>
+          </div>
         </div>
       </Card>
 
-      {hasResult && (
+      {isInvalidDate && (
         <Card>
-          <div className="flex flex-col">
-            <label htmlFor="result">Result:</label>
+          <p className="text-red-400 font-semibold">
+            Please select a valid birth date.
+          </p>
+        </Card>
+      )}
 
-            <div className="flex flex-row items-center">
-              <p>
-                {result.total.h} h {result.total.m.toString().padStart(2, "0")}{" "}
-                m {result.total.s.toString().padStart(2, "0")} s{" "}
-              </p>
+      {age && !isInvalidDate && (
+        <Card>
+          <div className="flex flex-col gap-4">
+            <div>
+              <h2 className="font-bold text-lg">Your age</h2>
+
+              <p className="text-sm text-gray-400">Current age calculation</p>
             </div>
 
-            <div className="mt-4">
-              <h3>With days:</h3>
-
-              <p>
-                {result.days.d} d {result.days.h} h {result.days.m} m{" "}
-                {result.days.s} s
+            <Card>
+              <p className="text-xl font-bold text-center">
+                {age.years} year(s), {age.months} month(s), {age.days} day(s)
               </p>
+            </Card>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Card>
+                <p className="text-sm text-gray-400">Total days</p>
+
+                <p className="text-2xl font-bold">{totalDays}</p>
+              </Card>
+
+              <Card>
+                <p className="text-sm text-gray-400">Born date</p>
+
+                <p className="text-lg font-bold">
+                  {selected.toLocaleDateString()}
+                </p>
+              </Card>
             </div>
           </div>
         </Card>
@@ -110,4 +113,4 @@ function TimeCalculator() {
   );
 }
 
-export default TimeCalculator;
+export default AgeCalculator;
