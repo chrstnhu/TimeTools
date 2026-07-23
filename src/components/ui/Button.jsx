@@ -23,7 +23,10 @@ function Button({ children, icon: Icon, variant = "primary", ...props }) {
             py-2.5
             rounded-full
             font-bold
+            hover:scale-105
+            hover:shadow-lg
             transition
+            duration-300
             ${styles[variant]}
         `}
     >

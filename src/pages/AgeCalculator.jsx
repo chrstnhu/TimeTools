@@ -22,8 +22,8 @@ function AgeCalculator() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <Card>
+    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8">
+      <Card className="p-8">
         <div className="flex flex-col gap-4">
           <div>
             <label className="font-semibold">Select your birth date</label>
@@ -77,32 +77,39 @@ function AgeCalculator() {
       )}
 
       {age && !isInvalidDate && (
-        <Card>
-          <div className="flex flex-col gap-4">
-            <div>
-              <h2 className="font-bold text-lg">Your age</h2>
-
+        <Card className="p-8 transition-all duration-300">
+          <div>
+            <div className="text-center">
+              <p className="mb-3 uppercase tracking-[0.3em] text-sm text-gray-400">
+                Your age
+              </p>
               <p className="text-sm text-gray-400">Current age calculation</p>
             </div>
 
-            <Card>
-              <p className="text-xl font-bold text-center">
+            <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
+              <p
+                className="text-2xl font-black tracking-widest"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
                 {age.years} year(s), {age.months} month(s), {age.days} day(s)
               </p>
-            </Card>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Card>
-                <p className="text-sm text-gray-400">Total days</p>
-
+            <div className="grid gap-5 grid-cols-2 mt-6">
+              <Card className="rounded-3xl p-6 text-center">
                 <p className="text-2xl font-bold">{totalDays}</p>
+
+                <p className="text-sm text-gray-400">Total days</p>
               </Card>
 
-              <Card>
-                <p className="text-sm text-gray-400">Born date</p>
-
+              <Card className="rounded-3xl p-6 text-center">
                 <p className="text-lg font-bold">
                   {selected.toLocaleDateString()}
+                </p>
+                <p className="mt-2 uppercase tracking-widest text-xs text-gray-400">
+                  Born date
                 </p>
               </Card>
             </div>
