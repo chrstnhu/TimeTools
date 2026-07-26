@@ -36,14 +36,14 @@ export const menuItems = [
     path: "/day-calculator",
     icon: Logs,
     title: "Day Calculator",
-    label: "Find out the number of days between dates",
+    label: "Add or subtract days from a specific date",
   },
   {
     name: "Date Calculator",
     path: "/date-calculator",
     icon: Calendars,
     title: "Date Calculator",
-    label: "Add or subtract days from a specific date",
+    label: "Find out the number of days between dates",
   },
   {
     name: "Age Calculator",

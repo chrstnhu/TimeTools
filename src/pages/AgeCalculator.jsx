@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, Navigate } from "react-router-dom";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { calculateAge } from "@/utils/calculateAge";
-import { Calendar as RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import ResultTime from "@/components/time/ResultTime";
 import SummaryGrid from "@/components/ui/SummaryGrid";
 import PageTitle from "@/components/ui/PageTitle";
@@ -16,7 +16,7 @@ function AgeCalculator() {
   const currentItem = menuItems.find((item) => item.path === location.pathname);
 
   if (!currentItem) {
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   const [selected, setSelected] = useState(null);
@@ -67,13 +67,18 @@ function AgeCalculator() {
   };
 
   const stats = selected && !isInvalidDate ? getStats(selected) : null;
+  const hasResult = Boolean(age && !isInvalidDate && stats);
 
   return (
-    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row flex-col gap-8 p-4">
+    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8 p-4">
       {/* ─── CALENDAR PICKER CARD ─── */}
-      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl w-full xl:max-w-md">
-        <div className="flex flex-col gap-6">
-          <PageTitle title={currentItem.title} icon={<currentItem.icon />} label={currentItem.label} />
+      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)]">
+        <div className="space-y-6 mb-10">
+          <PageTitle
+            title={currentItem.title}
+            icon={<currentItem.icon />}
+            label={currentItem.label}
+          />
 
           <div className="flex justify-center p-3 rounded-2xl">
             <DayPicker
@@ -105,6 +110,7 @@ function AgeCalculator() {
               variant="ghost"
               size="sm"
               icon={RotateCcw}
+              shape="halfRounded"
             >
               Reset
             </Button>
@@ -112,53 +118,60 @@ function AgeCalculator() {
         </div>
       </Card>
 
-      {/* ─── ERROR STATE ─── */}
-      {isInvalidDate && (
-        <Card className="p-6 border-2 border-red-500/50 bg-red-500/10 rounded-3xl h-fit">
-          <p className="text-red-400 text-sm font-semibold text-center">
-            Please select a valid birth date in the past.
-          </p>
-        </Card>
-      )}
+      {/* ─── RIGHT COLUMN (ERROR / RESULT DISPLAY CARD) ─── */}
+      <div className="flex flex-col gap-6 w-full xl:max-w-md">
+        {isInvalidDate && (
+          <Card className="p-6 border-2 border-red-500/50 bg-red-500/10 rounded-3xl h-fit">
+            <p className="text-red-400 text-sm font-semibold text-center">
+              Please select a valid birth date in the past.
+            </p>
+          </Card>
+        )}
 
-      {/* ─── CONDENSED RESULT CARD ─── */}
-      {age && !isInvalidDate && stats && (
-        <Card className="p-8 border-1 border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg rounded-3xl w-full xl:max-w-md transition-all duration-300">
+        <Card
+          className={`p-8 shadow-lg rounded-3xl transition-all duration-300 ${
+            hasResult
+              ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
+              : "border border-[var(--border)] bg-[var(--surface)] opacity-100"
+          }`}
+        >
           <div className="flex flex-col gap-6">
             <ResultTime
               title="Result"
               variant="ymd"
-              time={age}
+              time={hasResult ? age : { years: 0, months: 0, days: 0 }}
               label="Years • Months • Days"
             />
 
-            <hr className="border-t border-[var(--primary)] opacity-50" />
+            <hr className="my-6 border-t border-[var(--primary)] opacity-30" />
 
             <SummaryGrid
               title="Summary"
               cols={2}
               items={[
                 {
-                  value: stats.totalDays.toLocaleString(),
+                  value: hasResult ? stats.totalDays.toLocaleString() : "0",
                   label: "Total Days",
                 },
                 {
-                  value: stats.totalWeeks.toLocaleString(),
+                  value: hasResult ? stats.totalWeeks.toLocaleString() : "0",
                   label: "Total Weeks",
                 },
                 {
-                  value: stats.totalMonths.toLocaleString(),
+                  value: hasResult ? stats.totalMonths.toLocaleString() : "0",
                   label: "Total Months",
                 },
                 {
-                  value: `${stats.daysToNext} days`,
-                  label: `Turns ${stats.nextAge} in`,
+                  value: hasResult ? `${stats.daysToNext} days` : "0 days",
+                  label: hasResult
+                    ? `Turns ${stats.nextAge} in`
+                    : "Next Birthday",
                 },
               ]}
             />
           </div>
         </Card>
-      )}
+      </div>
     </div>
   );
 }

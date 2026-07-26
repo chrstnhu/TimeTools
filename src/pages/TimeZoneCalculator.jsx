@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import ClockDisplay from "@/components/time/ClockDisplay";
 import TimeZoneInput from "@/components/forms/TimeZoneInput";
 import Card from "@/components/ui/Card";
@@ -16,8 +16,9 @@ function TimeZone() {
   const currentItem = menuItems.find((item) => item.path === location.pathname);
 
   if (!currentItem) {
-    return null;
+    return <Navigate to="/" replace />;
   }
+
   const [date, setDate] = useState(new Date());
   const [is12Hours, setIs12Hours] = useState(false);
   const [customTime, setCustomTime] = useState(null);
@@ -50,7 +51,7 @@ function TimeZone() {
   return (
     <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
       {/* ─── HEADER CARD ─── */}
-      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl">
+      <Card className="p-8 shadow-md rounded-3xl bg-[var(--surface)]">
         <div className="flex flex-col gap-6">
           <PageTitle
             title={currentItem.title}
@@ -81,7 +82,7 @@ function TimeZone() {
           return (
             <Card
               key={item.zone}
-              className="p-6 border-2 border-[var(--border)] shadow-sm rounded-3xl transition-all hover:border-[var(--primary)]/50"
+              className="p-6 shadow-sm rounded-3xl transition-all bg-[var(--surface)] hover:border-[var(--primary)]/50 border border-[var(--border)]"
             >
               <div className="flex flex-col gap-4 text-center">
                 <div>

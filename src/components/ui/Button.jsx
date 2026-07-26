@@ -13,7 +13,7 @@ function Button({
     secondary:
       "bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--surface-hover)]",
     ghost:
-      "bg-transparent border-2 border-[var(--text)] text-[var(--text)] hover:bg-[var(--surface-hover)]",
+      "bg-transparent border-2 border-[var(--text)] text-[var(--text)] hover:bg-[var(--primary)]/10",
     success: "bg-emerald-600 text-white hover:bg-emerald-700",
     warning:
       "bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30",

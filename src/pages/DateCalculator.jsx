@@ -1,15 +1,11 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
-import {
-  Calendar as CalendarIcon,
-  RotateCcw,
-} from "lucide-react";
+import { Calendar as CalendarIcon, RotateCcw } from "lucide-react";
 import ResultTime from "@/components/time/ResultTime";
-import SummaryGrid from "@/components/ui/SummaryGrid";
 import PageTitle from "@/components/ui/PageTitle";
 import { menuItems } from "@/constants/menuItems";
 
@@ -18,7 +14,7 @@ function DateCalculator() {
   const currentItem = menuItems.find((item) => item.path === location.pathname);
 
   if (!currentItem) {
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   const [range, setRange] = useState();
@@ -38,10 +34,10 @@ function DateCalculator() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row flex-col gap-8 p-4">
+    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8 p-4">
       {/* ─── CALENDAR PICKER CARD ─── */}
-      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl w-full xl:max-w-md">
-        <div className="flex flex-col gap-6 mb-10">
+      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)]">
+        <div className="space-y-6 mb-10">
           <PageTitle
             title={currentItem.title}
             icon={<currentItem.icon />}
@@ -95,38 +91,48 @@ function DateCalculator() {
         </div>
       </Card>
 
-      {/* ─── RESULT DISPLAY CARD ─── */}
-      {hasResult && (
-        <Card className="p-8 border-1 border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg rounded-3xl w-full xl:max-w-md transition-all duration-300">
+      {/* ─── RIGHT COLUMN (RESULT DISPLAY CARD) ─── */}
+      <div className="flex flex-col gap-6 w-full xl:max-w-md">
+        <Card
+          className={`p-8 shadow-lg rounded-3xl transition-all duration-300 ${
+            hasResult
+              ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
+              : "border border-[var(--border)] bg-[var(--surface)] opacity-100"
+          }`}
+        >
           <div className="flex flex-col gap-6">
             <ResultTime
               title="Duration Result"
               variant="daysOnly"
-              days={days}
+              days={days !== null ? days : 0}
             />
 
-            <SummaryGrid
-              title="Selected Period"
-              items={[
-                {
-                  value: range.from.toLocaleDateString(),
-                  label: "Start Date",
-                  icon: (
-                    <CalendarIcon size={14} className="text-[var(--primary)]" />
-                  ),
-                },
-                {
-                  value: range.to.toLocaleDateString(),
-                  label: "End Date",
-                  icon: (
-                    <CalendarIcon size={14} className="text-[var(--primary)]" />
-                  ),
-                },
-              ]}
-            />
+            <div className="flex flex-col sm:flex-row gap-4 justify-between">
+              <div className="p-4 text-left bg-[var(--background)] rounded-2xl w-full">
+                <p className="uppercase tracking-widest text-xs text-gray-400 font-semibold">
+                  Start Date
+                </p>
+                <div className="text-lg font-bold flex items-center gap-1.5 mt-1 text-[var(--text-title)]">
+                  <CalendarIcon size={16} className="text-[var(--primary)]" />
+                  <span>
+                    {range?.from ? range.from.toLocaleDateString() : "-"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-4 text-left bg-[var(--background)] rounded-2xl w-full">
+                <p className="uppercase tracking-widest text-xs text-gray-400 font-semibold">
+                  End Date
+                </p>
+                <div className="text-lg font-bold flex items-center gap-1.5 mt-1 text-[var(--text-title)]">
+                  <CalendarIcon size={16} className="text-[var(--primary)]" />
+                  <span>{range?.to ? range.to.toLocaleDateString() : "-"}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </Card>
-      )}
+      </div>
     </div>
   );
 }

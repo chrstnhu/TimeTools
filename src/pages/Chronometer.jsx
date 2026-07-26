@@ -1,13 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import {
-  Pause,
-  Play,
-  RotateCcw,
-  Timer as TimerIcon,
-} from "lucide-react";
+import { Pause, Play, RotateCcw, Timer as TimerIcon } from "lucide-react";
 import { formatTime } from "@/utils/formatTime";
 import Timer from "@/components/time/Timer";
 import PageTitle from "@/components/ui/PageTitle";
@@ -18,7 +13,7 @@ function Chronometer() {
   const currentItem = menuItems.find((item) => item.path === location.pathname);
 
   if (!currentItem) {
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   const [counter, setCounter] = useState(0);
@@ -43,7 +38,6 @@ function Chronometer() {
 
   const handleReset = () => {
     handleStop();
-
     setCounter(0);
     setIsStart(false);
   };
@@ -59,7 +53,7 @@ function Chronometer() {
   return (
     <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
       {/* ─── CHRONOMETER ─── */}
-      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl w-full">
+      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)] border border-[var(--border)]">
         <div className="flex flex-col gap-6">
           <PageTitle
             title={currentItem.title}
@@ -68,7 +62,7 @@ function Chronometer() {
           />
 
           <div className="flex justify-center">
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-inner w-full max-w-md text-center">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)]/50 p-6 shadow-inner w-full max-w-md text-center">
               <p
                 className="text-4xl sm:text-5xl font-black tracking-wider text-[var(--text)]"
                 style={{ fontFamily: "var(--font-mono, monospace)" }}
@@ -88,6 +82,7 @@ function Chronometer() {
                 icon={Pause}
                 variant="primary"
                 size="md"
+                shape="halfRounded"
               >
                 Pause
               </Button>
@@ -97,6 +92,7 @@ function Chronometer() {
                 icon={Play}
                 variant="primary"
                 size="md"
+                shape="halfRounded"
               >
                 Start
               </Button>
@@ -107,6 +103,7 @@ function Chronometer() {
               icon={RotateCcw}
               variant="ghost"
               size="md"
+              shape="halfRounded"
               disabled={counter === 0 && !isStart}
             >
               Reset
@@ -116,7 +113,7 @@ function Chronometer() {
       </Card>
 
       {/* ─── TIMER ─── */}
-      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl w-full">
+      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)] border border-[var(--border)]">
         <div className="flex flex-col gap-6">
           <PageTitle
             title="Timer"

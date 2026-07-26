@@ -13,7 +13,6 @@ function Card({ children, className = "" }) {
         hover:shadow-lg
         ring-1 
         ring-[var(--foreground)]/10
-        bg-[var(--surface)]
         ${className}
       `}
     >

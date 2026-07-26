@@ -20,7 +20,7 @@ function Input({ type = "text", className = "", ...props }) {
         duration-200
         focus:ring-2
         focus:ring-[var(--ring)]
-        color-[var(--text-title)]
+        text-[var(--text)]
       `}
     />
   );

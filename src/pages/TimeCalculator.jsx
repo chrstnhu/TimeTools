@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import Card from "@/components/ui/Card";
 import { secondsToTime } from "@/utils/secondsToTime";
 import TimeInput from "@/components/forms/TimeInput";
 import CalculatorButtons from "@/components/calculator/CalculatorButtons";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
-import { Clock3 } from "lucide-react";
+import { Clock3, History, Trash2 } from "lucide-react";
 import ResultTime from "@/components/time/ResultTime";
 import SummaryGrid from "@/components/ui/SummaryGrid";
 import PageTitle from "@/components/ui/PageTitle";
@@ -42,6 +42,11 @@ export default function TimeCalculator() {
   const [activeOperation, setActiveOperation] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem("timeCalculatorHistory");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   function handleCalculate(operation) {
     const first = timeToSeconds(time1);
     const second = timeToSeconds(time2);
@@ -57,9 +62,24 @@ export default function TimeCalculator() {
     let total = operation === "+" ? first + second : first - second;
     total = Math.max(0, total);
 
-    setResult(secondsToTime(total));
+    const calculatedResult = secondsToTime(total);
+
+    setResult(calculatedResult);
     setHasResult(true);
     setActiveOperation(operation);
+
+    const newCalculation = {
+      time1: `${time1.h}h ${time1.m}m ${time1.s}s`,
+      time2: `${time2.h}h ${time2.m}m ${time2.s}s`,
+      operation: operation,
+      result: `${calculatedResult.total.h}h ${calculatedResult.total.m}m ${calculatedResult.total.s}s`,
+    };
+
+    setHistory((prevHistory) => {
+      const updated = [newCalculation, ...prevHistory].slice(0, 10);
+      localStorage.setItem("timeCalculatorHistory", JSON.stringify(updated));
+      return updated;
+    });
   }
 
   function handleReset() {
@@ -80,15 +100,20 @@ export default function TimeCalculator() {
     setErrorMsg("");
   }
 
+  function handleClearHistory() {
+    setHistory([]);
+    localStorage.removeItem("timeCalculatorHistory");
+  }
+
   const getChipLabel = () => {
     if (activeOperation === "+") return "+ Addition +";
-    if (activeOperation === "-") return "- Substraction -";
+    if (activeOperation === "-") return "- Subtraction -";
     return "Operation";
   };
 
   return (
     <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8 p-4">
-      <Card className="p-8 shadow-md rounded-3xl w-full">
+      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)]">
         <div className="space-y-6 mb-10">
           <PageTitle
             title={currentItem.title}
@@ -155,8 +180,14 @@ export default function TimeCalculator() {
         </div>
       </Card>
 
-      {!errorMsg && hasResult && (
-        <Card className="p-8 border-1 border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg rounded-3xl w-full xl:max-w-md transition-all duration-300">
+      <div className="flex flex-col gap-6 w-full xl:max-w-md">
+        <Card
+          className={`p-8 shadow-lg rounded-3xl transition-all duration-300 ${
+            hasResult
+              ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
+              : "border border-[var(--border)] bg-[var(--surface)] opacity-100"
+          }`}
+        >
           <ResultTime
             title="Result"
             variant="time"
@@ -164,9 +195,9 @@ export default function TimeCalculator() {
             label="Hours:Minutes:Seconds"
           />
 
-          <hr className="my-6 border-t border-[var(--primary)] opacity-50" />
+          <hr className="my-6 border-t border-[var(--primary)] opacity-30" />
 
-          <div className="mt-8">
+          <div className="mt-4">
             <SummaryGrid
               title="Equivalent"
               items={[
@@ -178,7 +209,46 @@ export default function TimeCalculator() {
             />
           </div>
         </Card>
-      )}
+
+        <Card className="p-6 shadow-md rounded-3xl bg-[var(--surface)]">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <History size={18} className="text-[var(--primary)]" />
+              <h3 className="text-sm font-semibold">Calculation History</h3>
+            </div>
+            {history.length > 0 && (
+              <button
+                onClick={handleClearHistory}
+                className="text-xs flex items-center gap-1 font-medium px-2.5 py-1 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all cursor-pointer"
+                title="Clear history"
+              >
+                <Trash2 size={14} /> Clear
+              </button>
+            )}
+          </div>
+
+          {history.length === 0 ? (
+            <p className="text-xs text-gray-400 italic">No calculations yet.</p>
+          ) : (
+            <ul className="space-y-2 max-h-40 overflow-y-auto pr-1">
+              {history.map((entry, index) => (
+                <li
+                  key={index}
+                  className="border border-[var(--border)] p-2.5 rounded-lg bg-[var(--background)] text-xs flex justify-between items-center"
+                >
+                  <span>
+                    <strong>{entry.time1}</strong> {entry.operation}{" "}
+                    <strong>{entry.time2}</strong>
+                  </span>
+                  <span className="text-[var(--primary)] font-bold">
+                    = {entry.result}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      </div>
     </div>
   );
 }
