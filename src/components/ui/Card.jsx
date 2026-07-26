@@ -5,7 +5,7 @@ function Card({ children, className = "" }) {
         max-w-full
         p-4
         text-center
-        rounded-2xl
+        rounded-3xl
         font-medium
         transition
         shadow-md
@@ -13,7 +13,7 @@ function Card({ children, className = "" }) {
         hover:shadow-lg
         ring-1 
         ring-[var(--foreground)]/10
-        bg-[var(--background)]/80
+        bg-[var(--surface)]
         ${className}
       `}
     >

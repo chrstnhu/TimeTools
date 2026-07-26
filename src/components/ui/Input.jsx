@@ -13,19 +13,14 @@ function Input({ type = "text", className = "", ...props }) {
         transition
         shadow-md
         hover:shadow-lg
-        bg-[var(--surface)]
-        border
-        border-gray-700
+        bg-[var(--surface-input)]
         placeholder:text-gray-500
         outline-none
         transition-all
         duration-200
-        focus:border-blue-500
         focus:ring-2
-        focus:ring-blue-500/30
-        hover:border-gray-500
-        ring-1
-        ring-[var(--background)]/70
+        focus:ring-[var(--ring)]
+        color-[var(--text-title)]
       `}
     />
   );

@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap");
 
 @import "tailwindcss";
+
 :root {
   font-family: Inter, system-ui, sans-serif;
   font-synthesis: none;
@@ -11,55 +12,71 @@
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Background */
-  --background: #0f172a;
-  --surface: #1e293b;
-  --surface-hover: #334155;
+  /* DARK MODE */
+  --background: #0F0F14;
+  --surface: #1C1C25;
+  --surface-input: #232331;
+  --surface-hover: #33435e;
 
   /* Text */
-  --text: #f8fafc;
-  --foreground: #f8fafc;
-  --muted: #cbd5e1;
+  --text: #8585A5;
+  --text-title: #EEEEF4;
+  --foreground: #f1f5f9;
+  --muted: #94a3b8;
 
   /* Accent */
-  --primary: #0b367c;
-  --primary-hover: #1b52d2;
+  --primary: #6F68D5;
+  --primary-hover: #6F68D5;
+  --primary-foreground: #ffffff;
 
   /* Border */
-  --border: #475569;
-
+  --border: #334155;
+  --ring: #38365F;
 }
 
 /* LIGHT MODE */
 .light {
   /* Background */
-  --background: #f8fafc;
+  --background: #F4F5F7;
   --surface: #ffffff;
-  --surface-hover: #c3dcf4;
+  --surface-input: #EDEDF2;
+  --surface-hover: #e2e8f0;
 
   /* Text */
   --foreground: #0f172a;
-  --text: #1e293b;
+  --text: #74749D;
+  --text-title: #18181D;
   --muted: #64748b;
 
   /* Accent */
-  --primary: #4f6fa5;
-  --primary-hover: #3f5f93;
+  --primary: #6860E2;
+  --primary-hover: #6860E2;
   --primary-foreground: #ffffff;
 
-
   /* Border */
-  --border: #cbd5e1;
+  --border: #F0F0F1;
+  --ring: #B8B6DD;
 }
-
 
 body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-title);
 }

@@ -3,20 +3,52 @@ import { RotateCcw, Plus, Minus, Save } from "lucide-react";
 
 function CalculatorButtons({ onAdd, onSubtract, onReset, onKeep }) {
   return (
-    <div className="flex gap-2 my-4 justify-center">
-      <Button icon={Plus} type="button" onClick={onAdd} variant="primary">
+    <div className="flex flex-wrap items-center justify-center gap-3 my-2">
+      <Button
+        icon={Plus}
+        type="button"
+        onClick={onAdd}
+        variant="primary"
+        shape="halfRounded"
+        size="md"
+        className="flex-1 sm:flex-initial min-w-[100px]"
+      >
         Add
       </Button>
 
-      <Button icon={Minus} type="button" onClick={onSubtract} variant="primary">
+      <Button
+        icon={Minus}
+        type="button"
+        onClick={onSubtract}
+        variant="primary"
+        shape="halfRounded"
+        size="md"
+        className="flex-1 sm:flex-initial min-w-[100px]"
+      >
         Subtract
       </Button>
 
-      <Button icon={RotateCcw} type="button" onClick={onReset} variant="ghost">
+      <Button
+        icon={RotateCcw}
+        type="button"
+        onClick={onReset}
+        variant="ghost"
+        shape="halfRounded"
+        size="md"
+        className="opacity-80 hover:opacity-100"
+      >
         Reset
       </Button>
 
-      <Button icon={Save} type="button" onClick={onKeep} variant="ghost">
+      <Button
+        icon={Save}
+        type="button"
+        onClick={onKeep}
+        variant="ghost"
+        shape="halfRounded"
+        size="md"
+        className="opacity-80 hover:opacity-100 "
+      >
         Keep result
       </Button>
     </div>

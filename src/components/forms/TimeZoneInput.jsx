@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TimeInput from "@/components/forms/TimeInput";
 import Button from "@/components/ui/Button";
+import { RotateCcw, Check } from "lucide-react";
 
 function TimeZoneInput({ setCustomTime }) {
   const [time1, setTime1] = useState({ h: 0, m: 0, s: 0 });
@@ -20,14 +21,33 @@ function TimeZoneInput({ setCustomTime }) {
     setCustomTime(custom);
   };
 
+  const handleReset = () => {
+    setTime1({ h: 0, m: 0, s: 0 });
+    setCustomTime(null);
+  };
+
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-3 my-2">
       <TimeInput id="time1" value={time1} onChange={setTime1} maxHours={23} />
 
       <div className="flex flex-row items-center gap-2">
-        <Button onClick={handleCalculate}>Try</Button>
+        <Button
+          onClick={handleCalculate}
+          icon={Check}
+          variant="primary"
+          size="sm"
+        >
+          Try
+        </Button>
 
-        <Button onClick={() => setCustomTime(null)}>Reset</Button>
+        <Button
+          onClick={handleReset}
+          icon={RotateCcw}
+          variant="ghost"
+          size="sm"
+        >
+          Reset
+        </Button>
       </div>
     </div>
   );

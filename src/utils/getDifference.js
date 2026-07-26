@@ -1,21 +1,22 @@
-export  function getDifference(displayDate, timeZone, localTimeZone) {
-    const localHour = Number(
-      new Intl.DateTimeFormat("en-US", {
-        timeZone: localTimeZone,
-        hour: "numeric",
-        hour12: false,
-      }).format(displayDate),
-    );
+export function getDifference(displayDate, timeZone, localTimeZone) {
+  try {
+    const getOffsetInMinutes = (tz) => {
+      const dateString = displayDate.toLocaleString("en-US", { timeZone: tz });
+      const timeZoneDate = new Date(dateString);
+      const utcDate = new Date(
+        displayDate.toLocaleString("en-US", { timeZone: "UTC" }),
+      );
+      return (timeZoneDate - utcDate) / (1000 * 60);
+    };
 
-    const zoneHour = Number(
-      new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        hour: "numeric",
-        hour12: false,
-      }).format(displayDate),
-    );
+    const targetOffset = getOffsetInMinutes(timeZone);
+    const localOffset = getOffsetInMinutes(localTimeZone);
 
-    const diff = zoneHour - localHour;
+    const diffHours = (targetOffset - localOffset) / 60;
 
-    return diff >= 0 ? `+${diff}h` : `${diff}h`;
+    if (diffHours === 0) return "same time";
+    return diffHours > 0 ? `+${diffHours}h` : `${diffHours}h`;
+  } catch (e) {
+    return "";
   }
+}

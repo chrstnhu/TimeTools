@@ -1,11 +1,26 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import {
+  Pause,
+  Play,
+  RotateCcw,
+  Timer as TimerIcon,
+} from "lucide-react";
 import { formatTime } from "@/utils/formatTime";
 import Timer from "@/components/time/Timer";
+import PageTitle from "@/components/ui/PageTitle";
+import { menuItems } from "@/constants/menuItems";
 
 function Chronometer() {
+  const location = useLocation();
+  const currentItem = menuItems.find((item) => item.path === location.pathname);
+
+  if (!currentItem) {
+    return null;
+  }
+
   const [counter, setCounter] = useState(0);
   const [isStart, setIsStart] = useState(false);
 
@@ -42,41 +57,74 @@ function Chronometer() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* CHRONOMETER */}
-      <Card>
-        <label className="font-bold text-center block">Chronometer</label>
+    <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
+      {/* ─── CHRONOMETER ─── */}
+      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl w-full">
+        <div className="flex flex-col gap-6">
+          <PageTitle
+            title={currentItem.title}
+            icon={<currentItem.icon />}
+            label={currentItem.label}
+          />
 
-        <div className="flex justify-center my-4">
-          <Card className="w-fit">
-            <p className="text-2xl font-bold">
-              {chrono.hours}:{chrono.minutes}:{chrono.seconds}
-              <span className="text-gray-400">:{chrono.milliseconds}</span>
-            </p>
-          </Card>
-        </div>
+          <div className="flex justify-center">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-inner w-full max-w-md text-center">
+              <p
+                className="text-4xl sm:text-5xl font-black tracking-wider text-[var(--text)]"
+                style={{ fontFamily: "var(--font-mono, monospace)" }}
+              >
+                {chrono.hours}:{chrono.minutes}:{chrono.seconds}
+                <span className="text-[var(--primary)] font-bold text-2xl sm:text-3xl ml-1">
+                  .{chrono.milliseconds}
+                </span>
+              </p>
+            </div>
+          </div>
 
-        <div className="flex justify-center gap-2">
-          {isStart ? (
-            <Button onClick={handleStop} icon={Pause}>
-              Pause
+          <div className="flex justify-center items-center gap-3 pt-2">
+            {isStart ? (
+              <Button
+                onClick={handleStop}
+                icon={Pause}
+                variant="primary"
+                size="md"
+              >
+                Pause
+              </Button>
+            ) : (
+              <Button
+                onClick={handleStart}
+                icon={Play}
+                variant="primary"
+                size="md"
+              >
+                Start
+              </Button>
+            )}
+
+            <Button
+              onClick={handleReset}
+              icon={RotateCcw}
+              variant="ghost"
+              size="md"
+              disabled={counter === 0 && !isStart}
+            >
+              Reset
             </Button>
-          ) : (
-            <Button onClick={handleStart} icon={Play}>
-              Start
-            </Button>
-          )}
-
-          <Button onClick={handleReset} icon={RotateCcw}>
-            Reset
-          </Button>
+          </div>
         </div>
       </Card>
 
-      {/* TIMER */}
-      <Card>
-        <label className="font-bold text-center block">Timer</label>
-        <Timer />
+      {/* ─── TIMER ─── */}
+      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl w-full">
+        <div className="flex flex-col gap-6">
+          <PageTitle
+            title="Timer"
+            icon={<TimerIcon />}
+            label="Set a countdown for your activities"
+          />
+          <Timer />
+        </div>
       </Card>
     </div>
   );

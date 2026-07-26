@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import Card from "@/components/ui/Card";
 import { secondsToTime } from "@/utils/secondsToTime";
 import TimeInput from "@/components/forms/TimeInput";
@@ -6,8 +7,20 @@ import CalculatorButtons from "@/components/calculator/CalculatorButtons";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
 import { Clock3 } from "lucide-react";
+import ResultTime from "@/components/time/ResultTime";
+import SummaryGrid from "@/components/ui/SummaryGrid";
+import PageTitle from "@/components/ui/PageTitle";
+import { menuItems } from "@/constants/menuItems";
+
 
 function DurationCalculator() {
+  const location = useLocation();
+  const currentItem = menuItems.find((item) => item.path === location.pathname);
+
+  if (!currentItem) {
+    return null;
+  }
+
   const initialResult = {
     total: {
       h: 0,
@@ -39,9 +52,15 @@ function DurationCalculator() {
   const [hasResult, setHasResult] = useState(false);
 
   const handleCalculate = (selectedOperation) => {
-    const seconds1 = time1.h * 3600 + time1.m * 60 + time1.s;
+    const seconds1 =
+      (Number(time1.h) || 0) * 3600 +
+      (Number(time1.m) || 0) * 60 +
+      (Number(time1.s) || 0);
 
-    const seconds2 = time2.h * 3600 + time2.m * 60 + time2.s;
+    const seconds2 =
+      (Number(time2.h) || 0) * 3600 +
+      (Number(time2.m) || 0) * 60 +
+      (Number(time2.s) || 0);
 
     let totalSeconds;
 
@@ -92,14 +111,21 @@ function DurationCalculator() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8">
-      <Card className="p-8">
-        <div className="space-y-8">
-          <div>
-            <div className="mb-4 flex items-center gap-2">
-              <Clock3 size={18} />
+    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row flex-col gap-8 p-4">
+      {/* ─── INPUT FORM CARD ─── */}
+      <Card className="p-8 border-2 border-[var(--border)] shadow-md rounded-3xl w-full xl:max-w-md">
+        <div className="flex flex-col gap-6 mb-10">
+          <PageTitle
+            title={currentItem.title}
+            icon={<currentItem.icon />}
+            label={currentItem.label}
+          />
 
-              <h2 className="font-semibold">First Hours</h2>
+          {/* First Duration Input */}
+          <div>
+            <div className="mb-3 flex items-center gap-2">
+              <Clock3 size={18} className="text-[var(--primary)]" />
+              <h3 className="font-semibold text-sm">First Duration</h3>
             </div>
 
             <TimeInput
@@ -109,9 +135,10 @@ function DurationCalculator() {
               maxHours={999}
             />
           </div>
+
           <Divider
             sx={{
-              "&::before,&::after": {
+              "&::before, &::after": {
                 borderColor: "var(--border)",
               },
             }}
@@ -122,16 +149,19 @@ function DurationCalculator() {
                 bgcolor: "var(--primary)",
                 color: "white",
                 fontWeight: 700,
+                fontSize: "0.75rem",
+                px: 1,
               }}
             />
           </Divider>
 
+          {/* Second Duration Input */}
           <div>
-            <div className="mb-4 flex items-center gap-2">
-              <Clock3 size={18} />
-
-              <h2 className="font-semibold">Second time</h2>
+            <div className="mb-3 flex items-center gap-2">
+              <Clock3 size={18} className="text-[var(--primary)]" />
+              <h3 className="font-semibold text-sm">Second Duration</h3>
             </div>
+
             <TimeInput
               id="time2"
               value={time2}
@@ -140,39 +170,40 @@ function DurationCalculator() {
             />
           </div>
 
-          <CalculatorButtons
-            onAdd={() => handleCalculate("+")}
-            onSubtract={() => handleCalculate("-")}
-            onReset={handleReset}
-            onKeep={handleKeep}
-          />
+          <div className="pt-2">
+            <CalculatorButtons
+              onAdd={() => handleCalculate("+")}
+              onSubtract={() => handleCalculate("-")}
+              onReset={handleReset}
+              onKeep={handleKeep}
+            />
+          </div>
         </div>
       </Card>
 
+      {/* ─── RESULT CARD ─── */}
       {hasResult && (
-        <Card>
-          <div className="space-y-5">
-            <div>
-              <label className="text-lg font-semibold">Total Duration</label>
+        <Card className="p-8 border-1 border-[var(--primary)] bg-[var(--primary)]/10 shadow-lg rounded-3xl w-full xl:max-w-md transition-all duration-300">
+          <div className="flex flex-col gap-6">
+            <ResultTime
+              title="Total Duration"
+              variant="full"
+              time={result.days}
+              negative={result.negative}
+              hasOperation={true}
+              label="Days • Hours:Minutes:Seconds"
+            />
 
-              <p className="text-sm text-gray-400">Calculated duration</p>
-            </div>
-
-            <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-lg">
-              <p
-                className="text-2xl font-black tracking-widest"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                }}
-              >
-                {" "}
-                {result.negative && "-"}
-                {!result.negative && "+"}
-                {result.days.d}d {String(result.days.h).padStart(2, "0")}:
-                {String(result.days.m).padStart(2, "0")}:
-                {String(result.days.s).padStart(2, "0")}s
-              </p>
-            </div>
+            {/* Summary Sub-Grid */}
+            <SummaryGrid
+              title="Equivalent"
+              items={[
+                { value: result.days.d, label: "Days" },
+                { value: result.days.h, label: "Hours" },
+                { value: result.days.m, label: "Minutes" },
+                { value: result.days.s, label: "Seconds" },
+              ]}
+            />
           </div>
         </Card>
       )}

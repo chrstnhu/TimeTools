@@ -17,7 +17,7 @@ function Layout() {
       <Sidebar />
 
       <div className="ml-16">
-        <Header />
+        {/* <Header /> */}
 
         <main className="p-4">
           <Routes>

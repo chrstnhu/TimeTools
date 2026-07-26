@@ -10,16 +10,60 @@ import {
 } from "lucide-react";
 
 export const menuItems = [
-  { name: "Home", path: "/", icon: Home },
-  { name: "Time Calculator", path: "/time-calculator", icon: Clock },
+  {
+    name: "Home",
+    path: "/",
+    icon: Home,
+    title: "Home",
+    label: "Welcome to your time dashboard",
+  },
+  {
+    name: "Time Calculator",
+    path: "/time-calculator",
+    icon: Clock,
+    title: "Time Calculator",
+    label: "Add or subtract time times",
+  },
   {
     name: "Duration Calculator",
     path: "/duration-calculator",
     icon: ClockPlus,
+    title: "Duration Calculator",
+    label: "Add or subtract two times with day support",
   },
-  { name: "Day Calculator", path: "/day-calculator", icon: Logs },
-  { name: "Date Calculator", path: "/date-calculator", icon: Calendars },
-  { name: "Age Calculator", path: "/age-calculator", icon: Cake },
-  { name: "Time Zone", path: "/time-zone", icon: Globe },
-  { name: "Chronometer", path: "/chronometer", icon: Timer },
+  {
+    name: "Day Calculator",
+    path: "/day-calculator",
+    icon: Logs,
+    title: "Day Calculator",
+    label: "Find out the number of days between dates",
+  },
+  {
+    name: "Date Calculator",
+    path: "/date-calculator",
+    icon: Calendars,
+    title: "Date Calculator",
+    label: "Add or subtract days from a specific date",
+  },
+  {
+    name: "Age Calculator",
+    path: "/age-calculator",
+    icon: Cake,
+    title: "Age Calculator",
+    label: "Select your date of birth",
+  },
+  {
+    name: "Time Zone",
+    path: "/time-zone",
+    icon: Globe,
+    title: "Time Zone",
+    label: "Compare times across different world zones",
+  },
+  {
+    name: "Chronometer",
+    path: "/chronometer",
+    icon: Timer,
+    title: "Chronometer",
+    label: "Measure elapsed time precisely",
+  },
 ];

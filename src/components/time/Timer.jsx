@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import { Pause, Play, RotateCcw } from "lucide-react";
-import { formatTime } from "@/utils/formatTime";
 import Input from "@/components/ui/Input";
+import CircularTime from "@/components/time/CircularTime";
 
 function Timer() {
   const [timer, setTimer] = useState(0);
@@ -11,6 +10,7 @@ function Timer() {
     minutes: 0,
     seconds: 0,
   });
+  const [totalTime, setTotalTime] = useState(0);
   const [isStart, setStart] = useState(false);
 
   const timerInterval = useRef(null);
@@ -32,6 +32,7 @@ function Timer() {
       duration = (timerInput.minutes * 60 + timerInput.seconds) * 1000;
       if (duration <= 0) return;
       setTimer(duration);
+      setTotalTime(duration);
     }
 
     setStart(true);
@@ -40,9 +41,9 @@ function Timer() {
         if (prev <= 10) {
           clearInterval(timerInterval.current);
           timerInterval.current = null;
+          setStart(false);
           return 0;
         }
-
         return prev - 10;
       });
 
@@ -59,16 +60,13 @@ function Timer() {
   const handleTimerReset = () => {
     handleTimerStop();
     setTimer(0);
+    setTotalTime(0);
     setElapsed(0);
     setTimerInput({
       minutes: 0,
       seconds: 0,
     });
-    setStart(false);
   };
-
-  const remaining = formatTime(timer);
-  const elapsedTime = formatTime(elapsed);
   useEffect(() => {
     return () => {
       clearInterval(timerInterval.current);
@@ -79,62 +77,98 @@ function Timer() {
     <>
       <div className="flex flex-col justify-center gap-3 my-4">
         <div className="flex justify-center gap-3">
-          <Button onClick={() => handleInputChange(2)}>2 min</Button>
-          <Button onClick={() => handleInputChange(5)}>5 min</Button>
-          <Button onClick={() => handleInputChange(10)}>10 min</Button>
-          <Button onClick={() => handleInputChange(30)}>30 min</Button>
+          <Button
+            onClick={() => handleInputChange(2)}
+            shape="halfRounded"
+            variant="ghost"
+          >
+            2 min
+          </Button>
+          <Button
+            onClick={() => handleInputChange(5)}
+            shape="halfRounded"
+            variant="ghost"
+          >
+            5 min
+          </Button>
+          <Button
+            onClick={() => handleInputChange(10)}
+            shape="halfRounded"
+            variant="ghost"
+          >
+            10 min
+          </Button>
+          <Button
+            onClick={() => handleInputChange(30)}
+            shape="halfRounded"
+            variant="ghost"
+          >
+            30 min
+          </Button>
         </div>
 
-        <div>
-          <Input
-            className="w-[120px]"
-            type="number"
-            min="0"
-            placeholder="Minutes"
-            value={timerInput.minutes}
-            onChange={(e) =>
-              setTimerInput({
-                ...timerInput,
-                minutes: Number(e.target.value),
-              })
-            }
-          />
-
-          <Input
-            className="w-[120px]"
-            type="number"
-            min="0"
-            max="59"
-            placeholder="Seconds"
-            value={timerInput.seconds}
-            onChange={(e) =>
-              setTimerInput({
-                ...timerInput,
-                seconds: Number(e.target.value),
-              })
-            }
-          />
+        <div className="flex justify-center gap-2 p-3 items-center">
+          <div className="flex flex-col gap-2">
+            <Input
+              className="w-[120px]
+                rounded-3xl
+                py-5
+                text-center
+                text-3xl
+                font-bold
+                shadow-sm
+                transition
+                focus:scale-105"
+              type="number"
+              min="0"
+              placeholder="Minutes"
+              value={timerInput.minutes}
+              onChange={(e) =>
+                setTimerInput({
+                  ...timerInput,
+                  minutes: Number(e.target.value),
+                })
+              }
+            />
+            <span className="text-xs font-medium uppercase tracking-widest text-gray-400">
+              Minutes
+            </span>
+          </div>
+          <p>:</p>
+          <div className="flex flex-col items-center gap-2">
+            <Input
+              className="w-[120px]
+                rounded-3xl
+                py-5
+                text-center
+                text-3xl
+                font-bold
+                shadow-sm
+                transition
+                focus:scale-105"
+              type="number"
+              min="0"
+              max="59"
+              placeholder="Seconds"
+              value={timerInput.seconds}
+              onChange={(e) =>
+                setTimerInput({
+                  ...timerInput,
+                  seconds: Number(e.target.value),
+                })
+              }
+            />
+            <span className="text-xs font-medium uppercase tracking-widest text-gray-400">
+              Seconds
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-center gap-3">
-        <Card className="w-[150px]">
-          <p className="text-sm text-gray-400">Remaining</p>
-
-          <p className="text-xl font-bold">
-            {remaining.minutes}:{remaining.seconds}:
-            <span className="text-gray-400">{remaining.milliseconds}</span>
-          </p>
-        </Card>
-
-        <Card className="w-[150px]">
-          <p className="text-sm text-gray-400">Elapsed</p>
-
-          <p className="text-xl font-bold">
-            {elapsedTime.minutes}:{elapsedTime.seconds}:
-            <span className="text-gray-400">{elapsedTime.milliseconds}</span>
-          </p>
-        </Card>
+      <div className="flex justify-center gap-3 items-center">
+        {totalTime > 0 && (
+          <CircularTime totalTime={totalTime} remainingTime={timer} />
+        )}
       </div>
 
       <div className="flex justify-center gap-3 mt-4">
@@ -148,7 +182,7 @@ function Timer() {
           </Button>
         )}
 
-        <Button onClick={handleTimerReset} icon={RotateCcw}>
+        <Button onClick={handleTimerReset} icon={RotateCcw} variant="ghost" shape="halfRounded">
           Reset
         </Button>
       </div>
