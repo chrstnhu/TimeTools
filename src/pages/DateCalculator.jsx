@@ -4,6 +4,7 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import { Switch } from "@/components/ui/Switch";
 import { Calendar as CalendarIcon, RotateCcw } from "lucide-react";
 import ResultTime from "@/components/time/ResultTime";
 import PageTitle from "@/components/ui/PageTitle";
@@ -18,12 +19,17 @@ function DateCalculator() {
   }
 
   const [range, setRange] = useState();
+  const [includeStart, setIncludeStart] = useState(false);
 
   function getDaysDifference() {
-    if (!range?.from || !range?.to) return null;
+    if (!range?.from) return null;
 
-    const diffTime = Math.abs(range.to.getTime() - range.from.getTime());
-    return Math.round(diffTime / (1000 * 60 * 60 * 24));
+    const endDate = range.to || range.from;
+
+    const diffTime = Math.abs(endDate.getTime() - range.from.getTime());
+    const baseDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+    return includeStart ? baseDays + 1 : baseDays;
   }
 
   const days = getDaysDifference();
@@ -31,6 +37,7 @@ function DateCalculator() {
 
   const handleReset = () => {
     setRange(undefined);
+    setIncludeStart(false);
   };
 
   return (
@@ -75,11 +82,29 @@ function DateCalculator() {
             />
           </div>
 
-          <div className="flex justify-center pt-2">
+          {/* ─── SWITCH & RESET ACTIONS ─── */}
+          <div className="flex flex-col sm:flex-row items-center justify-center px-2 pt-2 gap-4">
+            <label
+              className={`flex items-center gap-3 text-sm transition-opacity ${
+                !range
+                  ? "opacity-50 cursor-not-allowed font-normal"
+                  : includeStart
+                    ? "cursor-pointer text-[var(--text)] font-bold scale-105 underline"
+                    : "cursor-pointer text-[var(--text)] font-normal scale-100 no-underline"
+              }`}
+            >
+              <Switch
+                checked={includeStart}
+                onCheckedChange={setIncludeStart}
+                disabled={!range}
+              />
+              <span>Include start date</span>
+            </label>
+
             <Button
               type="button"
               onClick={handleReset}
-              disabled={!range}
+              disabled={!range && !includeStart}
               variant="ghost"
               size="sm"
               icon={RotateCcw}
@@ -126,7 +151,13 @@ function DateCalculator() {
                 </p>
                 <div className="text-lg font-bold flex items-center gap-1.5 mt-1 text-[var(--text-title)]">
                   <CalendarIcon size={16} className="text-[var(--primary)]" />
-                  <span>{range?.to ? range.to.toLocaleDateString() : "-"}</span>
+                  <span>
+                    {range?.to
+                      ? range.to.toLocaleDateString()
+                      : range?.from
+                        ? range.from.toLocaleDateString()
+                        : "-"}
+                  </span>
                 </div>
               </div>
             </div>
