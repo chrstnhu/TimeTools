@@ -14,7 +14,7 @@ function Sidebar() {
         ${isOpen ? "w-60" : "w-16"}`}
       >
         {/* Header */}
-        <div className="flex h-16 items-center px-4">
+        <div className="flex h-16 items-center px-4 justify-between">
           {isOpen && (
             <h2 className="text-xl font-bold text-[var(--text)]">Time Tools</h2>
           )}
@@ -28,34 +28,34 @@ function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="mt-4 flex-1">
-          <ul className="space-y-2 px-2">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
+        <nav className="mt-4 flex-1 p-2 justify-between flex flex-col">
+          <div>
+            <ul className="space-y-2">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
 
-              return (
-                <li key={item.path}>
-                  <Link
-                    to={item.path}
-                    onClick={() => setIsOpen(false)}
-                    className={`flex items-center rounded-2xl p-3 text-[var(--text)]  transition-colors hover:bg-[var(--surface-hover)]
+                return (
+                  <li key={item.path}>
+                    <Link
+                      to={item.path}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center rounded-2xl p-3 text-[var(--text)]  transition-colors hover:bg-[var(--surface-hover)]
                     ${isOpen ? "gap-4" : "justify-center"}`}
-                  >
-                    <Icon size={22} />
+                    >
+                      <Icon size={22} />
 
-                    {isOpen && (
-                      <span className="whitespace-nowrap">{item.name}</span>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                      {isOpen && (
+                        <span className="whitespace-nowrap">{item.name}</span>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
 
-        <div>
           <ThemeToggle isOpen={isOpen} />
-        </div>
+        </nav>
       </aside>
     </div>
   );

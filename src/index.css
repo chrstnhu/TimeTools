@@ -17,10 +17,12 @@
   --surface: #1C1C25;
   --surface-input: #232331;
   --surface-hover: #33435e;
+  --surface-disabled: #76748a;
 
   /* Text */
   --text: #8585A5;
   --text-title: #EEEEF4;
+  --text-disabled: #000000;
   --foreground: #f1f5f9;
   --muted: #94a3b8;
 
@@ -41,11 +43,13 @@
   --surface: #ffffff;
   --surface-input: #EDEDF2;
   --surface-hover: #e2e8f0;
+  --surface-disabled: #E5E7EB;
 
   /* Text */
   --foreground: #0f172a;
   --text: #74749D;
   --text-title: #18181D;
+  --text-disabled: #76748a;
   --muted: #64748b;
 
   /* Accent */

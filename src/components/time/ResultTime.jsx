@@ -2,7 +2,8 @@ export default function ResultTime({
   title = "Result",
   time, // Objet { h, m, s } or { d, h, m, s } or { years, months, days }
   days, // Days
-  variant = "time", // "time" | "full" | "daysOnly"
+  date,
+  variant = "time", // "time" | "full" | "daysOnly" | "ymd" | "date"
   label,
   negative = false,
   hasOperation = false,
@@ -58,6 +59,18 @@ export default function ResultTime({
             style={{ fontFamily: "var(--font-mono, monospace)" }}
           >
             {time.years || 0}y {time.months || 0}m {time.days || 0}d
+          </p>
+        )}
+
+        {/* VARIANT 5 : Format date */}
+        {variant === "date" && date && (
+          <p className="text-2xl sm:text-3xl font-black text-[var(--text-title)] tracking-tight">
+            {new Date(date).toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
         )}
 

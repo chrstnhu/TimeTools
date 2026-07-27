@@ -19,7 +19,7 @@ function ThemeToggle({ isOpen }) {
   return (
     <button
       onClick={toggleTheme}
-      className={`flex w-full items-center rounded-2xl p-3 text-[var(--foreground)] hover:bg-[var(--surface-hover)] transition-colors
+      className={`flex w-full items-center rounded-2xl p-3 text-[var(--text)] hover:bg-[var(--surface-hover)] transition-colors
       ${isOpen ? "gap-4" : "justify-center"}`}
     >
       {light ? <Moon size={22} /> : <Sun size={22} />}

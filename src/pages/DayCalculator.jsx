@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { RotateCcw, Plus, Minus, Calendar } from "lucide-react";
+import { RotateCcw, Plus, Minus } from "lucide-react";
 import PageTitle from "@/components/ui/PageTitle";
 import { menuItems } from "@/constants/menuItems";
+import ResultTime from "@/components/time/ResultTime";
 
 function DayCalculator() {
   const location = useLocation();
@@ -21,7 +22,7 @@ function DayCalculator() {
   const [daysToAdd, setDaysToAdd] = useState(0);
   const [operation, setOperation] = useState("+");
 
-  // Calcul de la nouvelle date
+  // Calculate new date
   const calculateNewDate = () => {
     const date = new Date(baseDate);
     const amount = Number(daysToAdd) || 0;
@@ -41,7 +42,6 @@ function DayCalculator() {
     setDaysToAdd(0);
     setOperation("+");
   };
-
 
   return (
     <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8 p-4">
@@ -71,7 +71,7 @@ function DayCalculator() {
                 <label className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2 block">
                   Operation
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 pt-3">
                   <Button
                     type="button"
                     variant={operation === "+" ? "primary" : "ghost"}
@@ -126,20 +126,7 @@ function DayCalculator() {
 
       <div className="flex flex-col gap-6 w-full xl:max-w-md">
         <Card className="p-8 shadow-lg rounded-3xl border-2 border-[var(--primary)] bg-[var(--primary)]/10">
-          <div className="flex flex-col gap-6 text-center">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text)]">
-              Resulting Date
-            </h3>
-            <div className="text-3xl font-black text-[var(--text-title)] flex items-center justify-center gap-2">
-              <Calendar className="text-[var(--primary)]" size={28} />
-              {resultDate.toLocaleDateString(undefined, {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </div>
-          </div>
+          <ResultTime title="Resulting Date" variant="date" date={resultDate} />
         </Card>
       </div>
     </div>

@@ -50,6 +50,7 @@ function DurationCalculator() {
   const [result, setResult] = useState(initialResult);
   const [hasResult, setHasResult] = useState(false);
   const [activeOperation, setActiveOperation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [history, setHistory] = useState(() => {
     const saved = localStorage.getItem("durationCalculatorHistory");
@@ -61,6 +62,14 @@ function DurationCalculator() {
       (Number(time1.h) || 0) * 3600 +
       (Number(time1.m) || 0) * 60 +
       (Number(time1.s) || 0);
+
+    // Limit check for First Duration (max 24 hours = 86400 seconds)
+    if (seconds1 > 86400) {
+      setErrorMsg("First duration cannot exceed 24 hours.");
+      return;
+    } else {
+      setErrorMsg("");
+    }
 
     const seconds2 =
       (Number(time2.h) || 0) * 3600 +
@@ -118,6 +127,7 @@ function DurationCalculator() {
     setResult(initialResult);
     setHasResult(false);
     setActiveOperation(null);
+    setErrorMsg("");
   };
 
   const handleKeep = () => {
@@ -132,6 +142,7 @@ function DurationCalculator() {
     setResult(initialResult);
     setHasResult(false);
     setActiveOperation(null);
+    setErrorMsg("");
   };
 
   const handleClearHistory = () => {
@@ -144,7 +155,6 @@ function DurationCalculator() {
     if (activeOperation === "-") return "- Subtraction -";
     return "Operation";
   };
-
 
   return (
     <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8 p-4">
@@ -159,17 +169,26 @@ function DurationCalculator() {
 
           {/* First Duration Input */}
           <div>
-            <div className="mb-3 flex items-center gap-2">
-              <Clock3 size={18} className="text-[var(--primary)]" />
-              <h3 className="font-semibold text-sm">First Duration</h3>
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Clock3 size={18} className="text-[var(--primary)]" />
+                <h3 className="font-semibold text-sm">
+                  First Duration (Max 24h)
+                </h3>
+              </div>
             </div>
 
             <TimeInput
               id="time1"
               value={time1}
               onChange={setTime1}
-              maxHours={999}
+              maxHours={24}
             />
+            {errorMsg && (
+              <p className="text-red-500 text-xs mt-1.5 font-medium">
+                {errorMsg}
+              </p>
+            )}
           </div>
 
           <Divider
@@ -238,60 +257,7 @@ function DurationCalculator() {
               hasOperation={true}
               label="Days • Hours:Minutes:Seconds"
             />
-
-            <hr className="my-6 border-t border-[var(--primary)] opacity-30" />
-
-            {/* Summary Sub-Grid */}
-            <SummaryGrid
-              title="Equivalent"
-              items={[
-                { value: result.days.d, label: "Days" },
-                { value: result.days.h, label: "Hours" },
-                { value: result.days.m, label: "Minutes" },
-                { value: result.days.s, label: "Seconds" },
-              ]}
-            />
           </div>
-        </Card>
-
-        {/* History Card */}
-        <Card className="p-6 shadow-md rounded-3xl bg-[var(--surface)]">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <History size={18} className="text-[var(--primary)]" />
-              <h3 className="text-sm font-semibold">Calculation History</h3>
-            </div>
-            {history.length > 0 && (
-              <button
-                onClick={handleClearHistory}
-                className="text-xs flex items-center gap-1 font-medium px-2.5 py-1 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all cursor-pointer"
-                title="Clear history"
-              >
-                <Trash2 size={14} /> Clear
-              </button>
-            )}
-          </div>
-
-          {history.length === 0 ? (
-            <p className="text-xs text-gray-400 italic">No calculations yet.</p>
-          ) : (
-            <ul className="space-y-2 max-h-40 overflow-y-auto pr-1">
-              {history.map((entry, index) => (
-                <li
-                  key={index}
-                  className="border border-[var(--border)] p-2.5 rounded-lg bg-[var(--background)] text-xs flex justify-between items-center"
-                >
-                  <span>
-                    <strong>{entry.time1}</strong> {entry.operation}{" "}
-                    <strong>{entry.time2}</strong>
-                  </span>
-                  <span className="text-[var(--primary)] font-bold">
-                    = {entry.result}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
         </Card>
       </div>
     </div>

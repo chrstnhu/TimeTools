@@ -5,12 +5,9 @@ export default function CircularTime({ totalTime, remainingTime }) {
   const radius = center - strokeWidth / 2;
   const circumference = 2 * Math.PI * radius;
 
-  // Calcul du ratio restant (de 1 à 0)
   const progress = totalTime > 0 ? remainingTime / totalTime : 0;
-  // Décalage du trait SVG
   const strokeDashoffset = circumference - progress * circumference;
 
-  // Formatage du temps
   const safeTime = Math.max(0, remainingTime);
   const minutes = String(Math.floor(safeTime / 60000)).padStart(2, "0");
   const seconds = String(Math.floor((safeTime % 60000) / 1000)).padStart(
@@ -22,7 +19,7 @@ export default function CircularTime({ totalTime, remainingTime }) {
   return (
     <div className="relative inline-flex items-center justify-center">
       <svg width={size} height={size} className="transform -rotate-90">
-        {/* Cercle d'arrière-plan */}
+        {/* Background Circle */}
         <circle
           cx={center}
           cy={center}
@@ -31,7 +28,8 @@ export default function CircularTime({ totalTime, remainingTime }) {
           strokeWidth={strokeWidth}
           className="text-gray-200 fill-none"
         />
-        {/* Cercle de progression */}
+
+        {/* Progress Circle */}
         <circle
           cx={center}
           cy={center}
@@ -45,7 +43,7 @@ export default function CircularTime({ totalTime, remainingTime }) {
         />
       </svg>
 
-      {/* Texte au centre */}
+      {/* Time display */}
       <div className="absolute font-bold text-sm">
         {minutes}:{seconds}.<span className="text-xs opacity-75">{ms}</span>
       </div>

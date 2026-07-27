@@ -11,7 +11,7 @@ function Button({
     primary:
       "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-hover)]",
     secondary:
-      "bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--surface-hover)]",
+      "bg-[var(--surface)] border-2 text-[var(--text)] hover:bg-[var(--surface-hover)]",
     ghost:
       "bg-transparent border-2 border-[var(--text)] text-[var(--text)] hover:bg-[var(--primary)]/10",
     success: "bg-emerald-600 text-white hover:bg-emerald-700",

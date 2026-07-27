@@ -3,21 +3,23 @@ import Card from "@/components/ui/Card";
 import { menuItems } from "@/constants/menuItems";
 
 function HomePage() {
+  const filteredMenuItems = menuItems.filter((item) => item.path !== "/");
+
   return (
-    <div className="mx-auto max-w-6xl p-4">
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {menuItems.map((item) => {
+    <div className="mx-auto max-w-6xl p-6 flex justify-center items-center">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full">
+        {filteredMenuItems.map((item) => {
           const Icon = item.icon;
 
           return (
             <Link key={item.path} to={item.path} className="group outline-none">
               <Card
                 className="
-                  h-48
-                  p-6
+                  h-50
+                  p-7
                   flex
                   flex-col
-                  items-center
+                  items-start
                   justify-center
                   gap-4
                   cursor-pointer
@@ -49,27 +51,20 @@ function HomePage() {
                     group-hover:shadow-md
                   "
                 >
-                  <Icon size={32} />
+                  <Icon size={28} />
                 </div>
 
-                <p className="text-center font-bold text-base text-[var(--text)] transition-colors group-hover:text-[var(--primary)]">
-                  {item.name}
-                </p>
-                <p
-                  className="
-                  text-center 
-                  font-medium 
-                  text-sm 
-                  text-[var(--text)] 
-                  opacity-0
-                  translate-y-2
-                  transition-colors 
-                  group-hover:opacity-100
-                  group-hover:translate-y-0
-                  "
-                >
-                  {item.label}
-                </p>
+                <div className="flex flex-col">
+                  <p className="font-bold text-2xl text-start text-[var(--text-title)] transition-colors group-hover:text-[var(--primary)]">
+                    {item.name}
+                  </p>
+
+                  {item.label && (
+                    <p className="font-medium text-sm text-start text-[var(--text)] opacity-75">
+                      {item.label}
+                    </p>
+                  )}
+                </div>
               </Card>
             </Link>
           );
