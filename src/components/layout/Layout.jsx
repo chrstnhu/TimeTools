@@ -14,6 +14,7 @@ import HomePage from "@/pages/HomePage";
 function Layout() {
   return (
     <div className="min-h-screen bg-[var(--background)]/90">
+      <Header />
       <Sidebar />
 
       <div className="ml-16">

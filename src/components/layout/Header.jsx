@@ -1,26 +1,20 @@
 import { useLocation } from "react-router-dom";
-
-const menuItems = [
-  { name: "Home", path: "/" },
-  { name: "Time Calculator", path: "/time-calculator" },
-  { name: "Date Calculator", path: "/date-calculator" },
-  { name: "Duration Calculator", path: "/duration-calculator" },
-  { name: "Day Calculator", path: "/day-calculator" },
-  { name: "Age Calculator", path: "/age-calculator" },
-  { name: "Time Zone", path: "/time-zone" },
-  { name: "Chronometer", path: "/chronometer" },
-];
-
+import { menuItems } from "@/constants/menuItems";
 function Header() {
   const location = useLocation();
 
   const currentPage =
     menuItems.find((item) => item.path === location.pathname) || menuItems[0];
 
+  const Icon = currentPage.icon;
+
   return (
-    <header className="relative z-10 flex h-16 items-center border-b-1 border-[var(--background)] bg-[var(--primary)]/20 p-4 text-[var(--text)]">
-      <div className="flex items-center gap-2">
-        <h2 className="text-2xl font-bold">{currentPage.name}</h2>
+    <header className="pl-20 relative z-10 flex h-16 items-center shadow-md bg-[var(--background)] p-4 text-[var(--text)]">
+      <div className="flex items-center gap-3">
+        {Icon && <Icon size={24} className="text-[var(--primary)]" />}
+        <h2 className="text-2xl font-bold text-[var(--text-title)]">
+          {currentPage.name}
+        </h2>
       </div>
     </header>
   );
