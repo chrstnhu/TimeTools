@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Button from "@/components/ui/Button";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { Pause, Play, X } from "lucide-react";
 import Input from "@/components/ui/Input";
 import CircularTime from "@/components/time/CircularTime";
 
@@ -15,6 +15,8 @@ function Timer() {
 
   const timerInterval = useRef(null);
   const [elapsed, setElapsed] = useState(0);
+
+  const [flags, setFlags] = useState([]);
 
   const handleInputChange = (minutes) => {
     setTimerInput({
@@ -57,6 +59,10 @@ function Timer() {
     setStart(false);
   };
 
+  const handleTimerFlag = () => {
+    setFlags((prevFlags) => [...prevFlags, elapsed]);
+  };
+
   const handleTimerReset = () => {
     handleTimerStop();
     setTimer(0);
@@ -67,6 +73,7 @@ function Timer() {
       seconds: 0,
     });
   };
+
   useEffect(() => {
     return () => {
       clearInterval(timerInterval.current);
@@ -107,8 +114,8 @@ function Timer() {
           </Button>
         </div>
 
-        <div className="flex justify-center gap-2 p-3 items-center">
-          <div className="flex flex-col gap-2">
+        <div className="flex justify-center gap-2 pt-3 items-center">
+          <div className="flex flex-col">
             <Input
               className="w-[120px]
                 rounded-3xl
@@ -135,7 +142,7 @@ function Timer() {
             </span>
           </div>
           <p>:</p>
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center">
             <Input
               className="w-[120px]
                 rounded-3xl
@@ -171,20 +178,40 @@ function Timer() {
         )}
       </div>
 
-      <div className="flex justify-center gap-3 mt-4">
+      <div className="flex justify-center gap-3 mt-2">
         {isStart ? (
-          <Button onClick={handleTimerStop} icon={Pause}>
-            Pause
-          </Button>
+          <>
+            <Button onClick={handleTimerStop} icon={Pause}>
+              Pause
+            </Button>
+            <Button
+              onClick={handleTimerReset}
+              icon={X}
+              variant="ghost"
+              shape="halfRounded"
+            >
+              Close
+            </Button>
+          </>
+        ) : timer > 0 ? (
+          <>
+            <Button onClick={handleTimerStart} icon={Play}>
+              Start
+            </Button>
+            <Button
+              onClick={handleTimerReset}
+              icon={X}
+              variant="ghost"
+              shape="halfRounded"
+            >
+              Close
+            </Button>
+          </>
         ) : (
           <Button onClick={handleTimerStart} icon={Play}>
             Start
           </Button>
         )}
-
-        <Button onClick={handleTimerReset} icon={RotateCcw} variant="ghost" shape="halfRounded">
-          Reset
-        </Button>
       </div>
     </>
   );
