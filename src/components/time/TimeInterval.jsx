@@ -1,0 +1,297 @@
+import { useState } from "react";
+import Card from "@/components/ui/Card";
+import TimeInput from "@/components/forms/TimeInput";
+import Button from "@/components/ui/Button";
+import Divider from "@mui/material/Divider";
+import Chip from "@mui/material/Chip";
+import PageTitle from "@/components/ui/PageTitle";
+import {
+  Clock3,
+  Clock9,
+  Calendar,
+  ArrowRight,
+  Calculator,
+  RotateCcw,
+  ArrowRightLeft,
+} from "lucide-react";
+import ResultTime from "@/components/time/ResultTime";
+import ModeSelector from "@/components/ui/ModeSelector";
+
+export default function TimeInterval({ currentItem, mode, setMode }) {
+  const initialResult = {
+    total: { h: 0, m: 0, s: 0 },
+    days: { d: 0, h: 0, m: 0, s: 0 },
+    negative: false,
+    dayLabel: "Today",
+  };
+
+  const [durTime1, setDurTime1] = useState({ h: 0, m: 0, s: 0 });
+  const [day1Offset, setDay1Offset] = useState(0);
+  const [durTime2, setDurTime2] = useState({ h: 0, m: 0, s: 0 });
+  const [day2Offset, setDay2Offset] = useState(0);
+
+  const [result, setResult] = useState(initialResult);
+  const [hasResult, setHasResult] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const timeModes = [
+    { id: "calculator", label: "Calculator", icon: Calculator },
+    { id: "interval", label: "Interval", icon: ArrowRightLeft },
+  ];
+
+  const dayOptions = [
+    { id: -1, label: "Yesterday" },
+    { id: 0, label: "Today" },
+    { id: 1, label: "Tomorrow" },
+  ];
+
+  const handleCalculate = () => {
+    const s1 =
+      (Number(durTime1.h) || 0) * 3600 +
+      (Number(durTime1.m) || 0) * 60 +
+      (Number(durTime1.s) || 0);
+
+    const s2 =
+      (Number(durTime2.h) || 0) * 3600 +
+      (Number(durTime2.m) || 0) * 60 +
+      (Number(durTime2.s) || 0);
+
+    if (s1 >= 86400 || s2 >= 86400) {
+      setErrorMsg("Times must be between 00:00 and 23:59.");
+      return;
+    }
+
+    const absoluteSeconds1 = s1 + day1Offset * 86400;
+    const absoluteSeconds2 = s2 + day2Offset * 86400;
+
+    if (absoluteSeconds1 > absoluteSeconds2) {
+      setErrorMsg("Start time must be before or equal to End time.");
+      return;
+    }
+
+    setErrorMsg("");
+
+    const diffSeconds = absoluteSeconds2 - absoluteSeconds1;
+    const absTotal = Math.abs(diffSeconds);
+
+    const days = Math.floor(absTotal / 86400);
+    const hours = Math.floor((absTotal % 86400) / 3600);
+    const minutes = Math.floor((absTotal % 3600) / 60);
+    const seconds = absTotal % 60;
+
+    const calculatedResult = {
+      total: { h: Math.floor(absTotal / 3600), m: minutes, s: seconds },
+      days: { d: days, h: hours, m: minutes, s: seconds },
+    };
+
+    let resultDayLabel = "Today";
+    if (days > 0) {
+      resultDayLabel = `${days} day${days > 1 ? "s" : ""} duration`;
+    } else if (hours > 0 || minutes > 0) {
+      resultDayLabel = "Within same period";
+    } else {
+      resultDayLabel = "Exact same time";
+    }
+
+    setResult({
+      ...calculatedResult,
+      negative: false,
+      dayLabel: resultDayLabel,
+    });
+    setHasResult(true);
+  };
+
+  const handleReset = () => {
+    setDurTime1({ h: 0, m: 0, s: 0 });
+    setDay1Offset(0);
+    setDurTime2({ h: 0, m: 0, s: 0 });
+    setDay2Offset(0);
+    setResult(initialResult);
+    setHasResult(false);
+    setErrorMsg("");
+  };
+
+  return (
+    <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-start">
+        <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)] flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[var(--border)]">
+            {currentItem && (
+              <PageTitle
+                title={currentItem.title}
+                icon={currentItem.icon ? <currentItem.icon /> : null}
+                label={currentItem.label}
+              />
+            )}
+
+            <ModeSelector
+              modes={timeModes}
+              currentMode={mode}
+              onModeChange={setMode}
+            />
+          </div>
+
+          <div className="space-y-6">
+            {/* Start Time */}
+            <div>
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Clock3 size={18} className="text-[var(--primary)]" />
+                  <h3 className="font-semibold text-sm">Start Time (From)</h3>
+                </div>
+                <div className="flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
+                  <Calendar size={14} className="text-[var(--primary)] ml-1" />
+                  {[-1, 0, 1].map((offset) => (
+                    <Button
+                      key={offset}
+                      type="button"
+                      onClick={() => setDay1Offset(offset)}
+                      variant={day1Offset === offset ? "primary" : "ghost"}
+                      size="sm"
+                      shape="square"
+                      className={`text-xs ${
+                        day1Offset === offset
+                          ? "!bg-[var(--primary)] !text-white"
+                          : "text-[var(--text-secondary)] hover:text-[var(--text)] border-none"
+                      }`}
+                    >
+                      {offset === -1
+                        ? "Yesterday"
+                        : offset === 0
+                          ? "Today"
+                          : "Tomorrow"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <TimeInput
+                id="durTime1"
+                value={durTime1}
+                onChange={setDurTime1}
+                maxHours={23}
+              />
+            </div>
+
+            <Divider
+              sx={{
+                "&::before, &::after": {
+                  borderColor: "var(--border)",
+                  mb: 3,
+                },
+              }}
+            >
+              <Chip
+                label="Elapsed Time Span"
+                icon={<ArrowRight size={14} />}
+                sx={{
+                  bgcolor: "var(--primary)",
+                  color: "white",
+                  fontWeight: 700,
+                  fontSize: "0.75rem",
+                  px: 1,
+                  mb: 3,
+                  "& .MuiChip-icon": { color: "white" },
+                }}
+              />
+            </Divider>
+
+            {/* End Time */}
+            <div>
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Clock9 size={18} className="text-[var(--primary)]" />
+                  <h3 className="font-semibold text-sm">End Time (To)</h3>
+                </div>
+                <div className="flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
+                  <Calendar size={14} className="text-[var(--primary)] ml-1" />
+                  {[-1, 0, 1].map((offset) => (
+                    <Button
+                      key={offset}
+                      type="button"
+                      onClick={() => setDay2Offset(offset)}
+                      variant={day2Offset === offset ? "primary" : "ghost"}
+                      size="sm"
+                      shape="square"
+                      className={`px-2 py-1 h-auto text-xs ${
+                        day2Offset === offset
+                          ? "!bg-[var(--primary)] !text-white"
+                          : "text-[var(--text-secondary)] hover:text-[var(--text)] border-none"
+                      }`}
+                    >
+                      {offset === -1
+                        ? "Yesterday"
+                        : offset === 0
+                          ? "Today"
+                          : "Tomorrow"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <TimeInput
+                id="durTime2"
+                value={durTime2}
+                onChange={setDurTime2}
+                maxHours={23}
+              />
+              {errorMsg && (
+                <p className="text-red-500 text-xs mt-1.5 font-medium">
+                  {errorMsg}
+                </p>
+              )}
+            </div>
+
+            <div className="pt-4 flex gap-4">
+              <Button
+                type="button"
+                onClick={handleCalculate}
+                variant="primary"
+                shape="halfRounded"
+                size="md"
+                icon={Calculator}
+                className="flex-1"
+              >
+                Calculate Duration
+              </Button>
+
+              <Button
+                type="button"
+                onClick={handleReset}
+                variant="secondary"
+                shape="halfRounded"
+                size="md"
+                icon={RotateCcw}
+                className="flex-1"
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
+        </Card>
+
+        <div className="flex flex-col gap-6 w-full xl:max-w-md">
+          <Card
+            className={`p-8 shadow-lg rounded-3xl transition-all duration-300 ${
+              hasResult
+                ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
+                : "border border-[var(--border)] bg-[var(--surface)] opacity-100"
+            }`}
+          >
+            <div className="flex flex-col gap-6">
+              <ResultTime
+                title="Time Between Both"
+                variant="daytime"
+                time={result.days}
+                dayLabel={result.dayLabel}
+                negative={result.negative}
+                hasOperation={false}
+                label="Hours:Minutes:Seconds"
+              />
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
