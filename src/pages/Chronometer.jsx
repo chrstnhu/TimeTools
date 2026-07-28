@@ -2,9 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import { Pause, Play, RotateCcw, Timer as TimerIcon, Flag } from "lucide-react";
+import { Pause, Play, RotateCcw, Flag } from "lucide-react";
 import { formatTime } from "@/utils/formatTime";
-import Timer from "@/components/time/Timer";
 import PageTitle from "@/components/ui/PageTitle";
 import { menuItems } from "@/constants/menuItems";
 
@@ -80,6 +79,7 @@ function Chronometer() {
             title={currentItem.title}
             icon={<currentItem.icon />}
             label={currentItem.label}
+            withBorder={true}
           />
 
           <div className="flex justify-center">
@@ -217,18 +217,6 @@ function Chronometer() {
               </div>
             </div>
           )}
-        </div>
-      </Card>
-
-      {/* ─── TIMER ─── */}
-      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)] border border-[var(--border)]">
-        <div className="flex flex-col gap-6">
-          <PageTitle
-            title="Timer"
-            icon={<TimerIcon />}
-            label="Set a countdown for your activities"
-          />
-          <Timer />
         </div>
       </Card>
     </div>
