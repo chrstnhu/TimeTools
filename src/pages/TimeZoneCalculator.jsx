@@ -57,6 +57,7 @@ function TimeZone() {
             title={currentItem.title}
             icon={<currentItem.icon />}
             label={currentItem.label}
+            withBorder={true}
           />
 
           <TimeZoneInput setCustomTime={setCustomTime} />

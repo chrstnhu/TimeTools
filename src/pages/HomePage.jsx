@@ -55,7 +55,7 @@ function HomePage() {
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="font-bold text-2xl text-start text-[var(--text-title)] transition-colors group-hover:text-[var(--primary)]">
+                  <p className="font-bold text-2xl text-start text-[var(--text-title)] transition-colors ">
                     {item.name}
                   </p>
 

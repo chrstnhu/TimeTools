@@ -18,7 +18,6 @@ export default function ModeSelector({ modes, currentMode, onModeChange }) {
                 : "text-[var(--text-secondary)] hover:text-[var(--text)]"
             }`}
           >
-            {/* Fond animé qui glisse d'un bouton à l'autre */}
             {isActive && (
               <motion.div
                 layoutId="activeModeIndicator"

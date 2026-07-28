@@ -1,20 +1,27 @@
 export default function ResultTime({
   title = "Result",
-  time, // Objet { h, m, s } or { d, h, m, s } or { years, months, days }
-  days, // Days
+  time, // Object { h, m, s } or { d, h, m, s }
+  days,
+  dayLabel, // "Yesterday", "Today", "Tomorrow", etc.
   date,
-  variant = "time", // "time" | "full" | "daysOnly" | "ymd" | "date"
+  variant = "time", // "time" | "full" | "daysOnly" | "ymd" | "date" | "daytime"
   label,
   negative = false,
   hasOperation = false,
 }) {
   const pad = (num) => String(num || 0).padStart(2, "0");
 
+  const daysCount = time?.d || 0;
+  const standardHours = time?.h || 0;
+  const totalHours = daysCount * 24 + standardHours;
+
   return (
     <div className="text-start">
-      <h2 className="mb-2 uppercase tracking-[0.2em] font-bold text-[var(--primary)]">
-        {title}
-      </h2>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="uppercase tracking-[0.2em] font-bold text-[var(--primary)]">
+          {title}
+        </h2>
+      </div>
 
       <div className="rounded-2xl py-4">
         {/* VARIANT 1 : Standard HH:MM:SS */}
@@ -37,6 +44,33 @@ export default function ResultTime({
             {time.d !== undefined && `${time.d}d `}
             {pad(time.h)}:{pad(time.m)}:{pad(time.s)}s
           </p>
+        )}
+
+        {/* VARIANT : Day + Format*/}
+        {variant === "daytime" && time && (
+          <div className="flex flex-col gap-2">
+            {dayLabel && (
+              <span className="text-lg font-bold text-[var(--primary)]">
+                {negative ? "-" : ""}
+                {dayLabel}
+              </span>
+            )}
+
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <p
+                className="text-3xl sm:text-4xl font-black tracking-wider text-[var(--foreground)]"
+                style={{ fontFamily: "var(--font-mono, monospace)" }}
+              >
+                {pad(totalHours)}:{pad(time.m)}:{pad(time.s)}
+              </p>
+
+              {daysCount > 0 && (
+                <span className="text-xs sm:text-sm font-semibold text-[var(--text-secondary)]">
+                  ({daysCount * 24}h ({daysCount}d) + {standardHours}h)
+                </span>
+              )}
+            </div>
+          </div>
         )}
 
         {/* VARIANT 3 : Format with days */}
@@ -76,7 +110,7 @@ export default function ResultTime({
 
         {/* Explanatory option */}
         {label && (
-          <p className="text-sm text-[var(--text)] uppercase tracking-widest mt-2">
+          <p className="text-sm text-[var(--text)] uppercase tracking-widest mt-3">
             {label}
           </p>
         )}

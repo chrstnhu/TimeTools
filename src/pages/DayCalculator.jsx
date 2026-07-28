@@ -51,6 +51,7 @@ function DayCalculator() {
             title={currentItem.title}
             icon={<currentItem.icon />}
             label={currentItem.label}
+            withBorder={true}
           />
 
           <div className="space-y-4">
@@ -67,7 +68,7 @@ function DayCalculator() {
             </div>
 
             <div className="flex gap-4">
-              <div className="w-1/2">
+              <div className="w-1/2 ml-3">
                 <label className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2 block">
                   Operation
                 </label>

@@ -78,6 +78,7 @@ function AgeCalculator() {
             title={currentItem.title}
             icon={<currentItem.icon />}
             label={currentItem.label}
+            withBorder={true}
           />
 
           <div className="flex justify-center p-3 rounded-2xl">

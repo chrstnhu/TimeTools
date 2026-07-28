@@ -1,12 +1,13 @@
 import {
   Home,
-  Clock,
-  Logs,
+  CalendarPlus,
   Calendars,
   Cake,
   Globe,
   ClockPlus,
   Timer,
+  ClockFading,
+  Hourglass,
 } from "lucide-react";
 
 export const menuItems = [
@@ -20,21 +21,14 @@ export const menuItems = [
   {
     name: "Time Calculator",
     path: "/time-calculator",
-    icon: Clock,
+    icon: ClockFading,
     title: "Time Calculator",
     label: "Add or subtract time times",
   },
   {
-    name: "Duration Calculator",
-    path: "/duration-calculator",
-    icon: ClockPlus,
-    title: "Duration Calculator",
-    label: "Add or subtract two times with day support",
-  },
-  {
     name: "Day Calculator",
     path: "/day-calculator",
-    icon: Logs,
+    icon: CalendarPlus,
     title: "Day Calculator",
     label: "Add or subtract days from a specific date",
   },
@@ -65,5 +59,12 @@ export const menuItems = [
     icon: Timer,
     title: "Chronometer",
     label: "Measure elapsed time precisely",
+  },
+  {
+    name: "Timer",
+    path: "/timer",
+    icon: Hourglass,
+    title: "Timer",
+    label: "Set a timer for a specific duration",
   },
 ];
