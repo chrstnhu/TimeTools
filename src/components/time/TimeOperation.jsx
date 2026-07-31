@@ -29,7 +29,6 @@ function timeToSeconds(time) {
   );
 }
 
-// Ajoutez currentItem, mode et setMode dans les paramètres
 export default function TimeOperation({ currentItem, mode, setMode }) {
   const initialResult = {
     total: { h: 0, m: 0, s: 0 },

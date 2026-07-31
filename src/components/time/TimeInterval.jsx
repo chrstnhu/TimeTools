@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import ResultTime from "@/components/time/ResultTime";
 import ModeSelector from "@/components/ui/ModeSelector";
+import { motion } from "framer-motion";
 
 export default function TimeInterval({ currentItem, mode, setMode }) {
   const initialResult = {
@@ -139,29 +140,48 @@ export default function TimeInterval({ currentItem, mode, setMode }) {
                   <Clock3 size={18} className="text-[var(--primary)]" />
                   <h3 className="font-semibold text-sm">Start Time (From)</h3>
                 </div>
-                <div className="flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
-                  <Calendar size={14} className="text-[var(--primary)] ml-1" />
-                  {[-1, 0, 1].map((offset) => (
-                    <Button
-                      key={offset}
-                      type="button"
-                      onClick={() => setDay1Offset(offset)}
-                      variant={day1Offset === offset ? "primary" : "ghost"}
-                      size="sm"
-                      shape="square"
-                      className={`text-xs ${
-                        day1Offset === offset
-                          ? "!bg-[var(--primary)] !text-white"
-                          : "text-[var(--text-secondary)] hover:text-[var(--text)] border-none"
-                      }`}
-                    >
-                      {offset === -1
-                        ? "Yesterday"
-                        : offset === 0
-                          ? "Today"
-                          : "Tomorrow"}
-                    </Button>
-                  ))}
+
+                <div className="relative flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
+                  <Calendar
+                    size={14}
+                    className="text-[var(--primary)] ml-1 relative z-10"
+                  />
+
+                  {[-1, 0, 1].map((offset) => {
+                    const isSelected = day1Offset === offset;
+                    return (
+                      <Button
+                        key={offset}
+                        type="button"
+                        onClick={() => setDay1Offset(offset)}
+                        variant="ghost"
+                        size="sm"
+                        shape="square"
+                        className={`relative z-10 text-xs px-2 py-1 h-auto border-none transition-colors ${
+                          isSelected
+                            ? "!text-white"
+                            : "text-[var(--text-secondary)] hover:text-[var(--text)]"
+                        }`}
+                      >
+                        {isSelected && (
+                          <motion.div
+                            layoutId="activeDay1"
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 30,
+                            }}
+                            className="absolute inset-0 bg-[var(--primary)] rounded-lg -z-10"
+                          />
+                        )}
+                        {offset === -1
+                          ? "Yesterday"
+                          : offset === 0
+                            ? "Today"
+                            : "Tomorrow"}
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -203,29 +223,49 @@ export default function TimeInterval({ currentItem, mode, setMode }) {
                   <Clock9 size={18} className="text-[var(--primary)]" />
                   <h3 className="font-semibold text-sm">End Time (To)</h3>
                 </div>
-                <div className="flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
-                  <Calendar size={14} className="text-[var(--primary)] ml-1" />
-                  {[-1, 0, 1].map((offset) => (
-                    <Button
-                      key={offset}
-                      type="button"
-                      onClick={() => setDay2Offset(offset)}
-                      variant={day2Offset === offset ? "primary" : "ghost"}
-                      size="sm"
-                      shape="square"
-                      className={`px-2 py-1 h-auto text-xs ${
-                        day2Offset === offset
-                          ? "!bg-[var(--primary)] !text-white"
-                          : "text-[var(--text-secondary)] hover:text-[var(--text)] border-none"
-                      }`}
-                    >
-                      {offset === -1
-                        ? "Yesterday"
-                        : offset === 0
-                          ? "Today"
-                          : "Tomorrow"}
-                    </Button>
-                  ))}
+
+                <div className="relative flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
+                  <Calendar
+                    size={14}
+                    className="text-[var(--primary)] ml-1 relative z-10"
+                  />
+
+                  {[-1, 0, 1].map((offset) => {
+                    const isSelected = day2Offset === offset;
+                    return (
+                      <Button
+                        key={offset}
+                        type="button"
+                        onClick={() => setDay2Offset(offset)}
+                        variant="ghost"
+                        size="sm"
+                        shape="square"
+                        className={`relative z-10 px-2 py-1 h-auto text-xs border-none transition-colors ${
+                          isSelected
+                            ? "!text-white"
+                            : "text-[var(--text-secondary)] hover:text-[var(--text)]"
+                        }`}
+                      >
+
+                        {isSelected && (
+                          <motion.div
+                            layoutId="activeDay2"
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 30,
+                            }}
+                            className="absolute inset-0 bg-[var(--primary)] rounded-lg -z-10"
+                          />
+                        )}
+                        {offset === -1
+                          ? "Yesterday"
+                          : offset === 0
+                            ? "Today"
+                            : "Tomorrow"}
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
 
