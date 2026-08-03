@@ -2,7 +2,7 @@
 
 A web-based time utility application built with React and Vite. TimeTool provides a comprehensive suite of tools for calculating, converting, and manipulating time, including date calculators, time zone converters, and productivity timers.
 
-> [Demo site](https://time-tools-git-main-chrstnhus-projects.vercel.app/)
+> [Demo site](https://time-tools-chi.vercel.app/)
 
 ![Demo TimeTools](src/assets/Timetool-visual.gif)
 
