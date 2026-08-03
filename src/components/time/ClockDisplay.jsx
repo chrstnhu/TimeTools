@@ -11,6 +11,10 @@ function ClockDisplay({ time, size = "text-3xl" }) {
         items-center
         justify-center
         flex-wrap
+        text-sm
+        sm:text-lg
+        md:text-2xl
+        lg:text-4xl
         gap-1
       `}
     >

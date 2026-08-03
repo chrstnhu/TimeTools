@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export default function ModeSelector({ modes, currentMode, onModeChange }) {
   return (
-    <div className="relative flex items-center gap-1 bg-[var(--background)] p-1.5 rounded-2xl border border-[var(--border)] self-start sm:self-auto">
+    <div className="relative flex items-center justify-center gap-1 bg-[var(--background)] p-1.5 rounded-2xl border border-[var(--border)] self-center sm:self-auto">
       {modes.map((item) => {
         const IconComponent = item.icon;
         const isActive = currentMode === item.id;
@@ -12,7 +12,7 @@ export default function ModeSelector({ modes, currentMode, onModeChange }) {
             key={item.id}
             type="button"
             onClick={() => onModeChange(item.id)}
-            className={`relative z-10 flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+            className={`relative z-10 flex items-center justify-center text-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
               isActive
                 ? "text-white"
                 : "text-[var(--text-secondary)] hover:text-[var(--text)]"
@@ -27,7 +27,7 @@ export default function ModeSelector({ modes, currentMode, onModeChange }) {
             )}
 
             {IconComponent && <IconComponent size={16} />}
-            {item.label}
+            <span>{item.label}</span>
           </button>
         );
       })}

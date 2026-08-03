@@ -16,13 +16,10 @@ function Layout() {
       <Header />
       <Sidebar />
 
-      <div className="ml-16">
-        {/* <Header /> */}
-
+      <div className="sm:ml-16 pt-12 pb-16 sm:p-0">
         <main className="p-4">
           <Routes>
             <Route path="/" element={<HomePage />} />
-
             <Route path="/time-calculator" element={<TimeCalculator />} />
             <Route path="/time-zone" element={<TimeZoneCalculator />} />
             <Route path="/date-calculator" element={<DateCalculator />} />

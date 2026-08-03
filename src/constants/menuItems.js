@@ -4,7 +4,6 @@ import {
   Calendars,
   Cake,
   Globe,
-  ClockPlus,
   Timer,
   ClockFading,
   Hourglass,
@@ -23,7 +22,7 @@ export const menuItems = [
     path: "/time-calculator",
     icon: ClockFading,
     title: "Time Calculator",
-    label: "Add or subtract time times",
+    label: "Add or subtract times",
   },
   {
     name: "Day Calculator",
@@ -51,7 +50,7 @@ export const menuItems = [
     path: "/time-zone",
     icon: Globe,
     title: "Time Zone",
-    label: "Compare times across different world zones",
+    label: "Compare or convert times across different world zones",
   },
   {
     name: "Chronometer",

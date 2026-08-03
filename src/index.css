@@ -70,9 +70,20 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Default logo (Dark mode) */
+.app-logo {
+  content: url("@/assets/Logo-timetool-light.png");
+}
+
+/* Change logo when .light class is active */
+.light .app-logo {
+  content: url("@/assets/Logo-timetool-dark.png");
+}
+
 #root {
   min-height: 100vh;
 }
+
 
 h1,
 h2,

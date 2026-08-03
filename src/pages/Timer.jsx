@@ -105,15 +105,17 @@ function Timer() {
             <div className="flex justify-center gap-2 pt-3 items-center">
               <div className="flex flex-col">
                 <Input
-                  className="w-[120px]
-                rounded-3xl
-                py-5
-                text-center
-                text-3xl
-                font-bold
-                shadow-sm
-                transition
-                focus:scale-105"
+                  className="w-[80px]
+                  sm:w-[120px]
+                  rounded-3xl
+                  py-5
+                  text-center
+                  text-lg
+                  sm:text-3xl 
+                  font-bold
+                  shadow-sm
+                  transition
+                  focus:scale-105"
                   type="number"
                   min="0"
                   placeholder="Minutes"
@@ -132,15 +134,17 @@ function Timer() {
               <p>:</p>
               <div className="flex flex-col items-center">
                 <Input
-                  className="w-[120px]
-                rounded-3xl
-                py-5
-                text-center
-                text-3xl
-                font-bold
-                shadow-sm
-                transition
-                focus:scale-105"
+                  className="w-[80px]
+                  sm:w-[120px]
+                  rounded-3xl
+                  py-5
+                  text-center
+                  text-lg
+                  sm:text-3xl 
+                  font-bold
+                  shadow-sm
+                  transition
+                  focus:scale-105"
                   type="number"
                   min="0"
                   max="59"
@@ -166,17 +170,17 @@ function Timer() {
             )}
           </div>
 
-          <div className="flex justify-center gap-3 mt-2">
+          <div className="flex flex-wrap justify-center gap-3 mt-2">
             {isStart ? (
               <>
-                <Button onClick={handleTimerStop} icon={Pause}>
+                <Button onClick={handleTimerStop} icon={Pause} shape="square">
                   Pause
                 </Button>
                 <Button
                   onClick={handleTimerReset}
                   icon={X}
                   variant="ghost"
-                  shape="halfRounded"
+                  shape="square"
                 >
                   Close
                 </Button>
@@ -190,13 +194,13 @@ function Timer() {
                   onClick={handleTimerReset}
                   icon={X}
                   variant="ghost"
-                  shape="halfRounded"
+                  shape="square"
                 >
                   Close
                 </Button>
               </>
             ) : (
-              <Button onClick={handleTimerStart} icon={Play}>
+              <Button onClick={handleTimerStart} icon={Play} shape="square">
                 Start
               </Button>
             )}

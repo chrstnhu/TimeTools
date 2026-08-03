@@ -32,7 +32,8 @@ function HomePage() {
                     p-7
                     flex
                     flex-col
-                    items-start
+                    items-center
+                    sm:items-start
                     justify-center
                     gap-4
                     cursor-pointer
@@ -68,12 +69,12 @@ function HomePage() {
                   </div>
 
                   <div className="flex flex-col">
-                    <p className="font-bold text-2xl text-start text-[var(--text-title)] transition-colors">
+                    <p className="font-bold text-2xl text-center sm:text-start text-[var(--text-title)] transition-colors">
                       {item.name}
                     </p>
 
                     {item.label && (
-                      <p className="font-medium text-sm text-start text-[var(--text)] opacity-75">
+                      <p className="font-medium text-sm text-center sm:text-start text-[var(--text)] opacity-75">
                         {item.label}
                       </p>
                     )}

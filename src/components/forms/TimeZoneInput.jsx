@@ -35,6 +35,7 @@ function TimeZoneInput({ setCustomTime }) {
           onClick={handleCalculate}
           icon={Check}
           variant="primary"
+          shape="square"
           size="sm"
         >
           Try
@@ -44,6 +45,7 @@ function TimeZoneInput({ setCustomTime }) {
           onClick={handleReset}
           icon={RotateCcw}
           variant="ghost"
+          shape="square"
           size="sm"
         >
           Reset

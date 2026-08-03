@@ -16,8 +16,8 @@ export default function ResultTime({
   const totalHours = daysCount * 24 + standardHours;
 
   return (
-    <div className="text-start">
-      <div className="flex items-center justify-between mb-2">
+    <div className="text-center sm:text-start">
+      <div className="flex items-center justify-center sm:justify-start mb-2">
         <h2 className="uppercase tracking-[0.2em] font-bold text-[var(--primary)]">
           {title}
         </h2>
@@ -27,7 +27,7 @@ export default function ResultTime({
         {/* VARIANT 1 : Standard HH:MM:SS */}
         {variant === "time" && time && (
           <p
-            className="text-5xl font-black tracking-wider text-[var(--foreground)]"
+            className="text-3xl sm:text-4xl font-black tracking-wider text-[var(--foreground)]"
             style={{ fontFamily: "var(--font-mono, monospace)" }}
           >
             {pad(time.h)}:{pad(time.m)}:{pad(time.s)}
@@ -46,9 +46,9 @@ export default function ResultTime({
           </p>
         )}
 
-        {/* VARIANT : Day + Format*/}
+        {/* VARIANT : Day + Format */}
         {variant === "daytime" && time && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col items-center sm:items-start gap-2">
             {dayLabel && (
               <span className="text-lg font-bold text-[var(--primary)]">
                 {negative ? "-" : ""}
@@ -56,7 +56,7 @@ export default function ResultTime({
               </span>
             )}
 
-            <div className="flex items-baseline gap-3 flex-wrap">
+            <div className="flex items-baseline justify-center sm:justify-start gap-3 flex-wrap">
               <p
                 className="text-3xl sm:text-4xl font-black tracking-wider text-[var(--foreground)]"
                 style={{ fontFamily: "var(--font-mono, monospace)" }}
@@ -76,7 +76,7 @@ export default function ResultTime({
         {/* VARIANT 3 : Format with days */}
         {variant === "daysOnly" && (
           <p
-            className="text-5xl font-black tracking-wider text-[var(--foreground)]"
+            className="text-3xl sm:text-4xl font-black tracking-wider text-[var(--foreground)]"
             style={{ fontFamily: "var(--font-mono, monospace)" }}
           >
             {days ?? 0}
@@ -98,7 +98,7 @@ export default function ResultTime({
 
         {/* VARIANT 5 : Format date */}
         {variant === "date" && date && (
-          <p className="text-2xl sm:text-3xl font-black text-[var(--text-title)] tracking-tight">
+          <p className="text-3xl sm:text-4xl font-black text-[var(--text-title)] tracking-tight">
             {new Date(date).toLocaleDateString("en-US", {
               weekday: "long",
               year: "numeric",
@@ -110,7 +110,7 @@ export default function ResultTime({
 
         {/* Explanatory option */}
         {label && (
-          <p className="text-sm text-[var(--text)] uppercase tracking-widest mt-3">
+          <p className="text-[12px] sm:text-lg text-[var(--text)] uppercase tracking-widest mt-3">
             {label}
           </p>
         )}

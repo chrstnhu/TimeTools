@@ -2,7 +2,7 @@ function Button({
   children,
   icon: Icon,
   variant = "primary",
-  shape = "halfRounded", // "rounded", "square", "circle"
+  shape = "halfRounded", // "halfRounded", "rounded", "square", "circle"
   size = "md", // "sm", "md", "lg"
   className = "",
   ...props
@@ -19,18 +19,35 @@ function Button({
       "bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30",
   };
 
+  const sizes = {
+    sm: {
+      padding: shape === "circle" ? "p-2" : "px-3 py-1.5",
+      text: "text-xs sm:text-sm",
+    },
+    md: {
+      padding: shape === "circle" ? "p-3" : "px-4 sm:px-5 py-2 sm:py-2.5",
+      text: "text-xs sm:text-base",
+    },
+    lg: {
+      padding: shape === "circle" ? "p-4" : "px-6 py-3",
+      text: "text-sm sm:text-lg",
+    },
+  };
+
   const shapes = {
-    halfRounded: "rounded-2xl px-5 py-2.5", 
-    rounded: "rounded-full px-5 py-2.5", 
-    square: "rounded-lg px-4 py-2.5", 
-    circle: "rounded-full p-3 aspect-square justify-center", 
+    halfRounded: "rounded-2xl",
+    rounded: "rounded-full",
+    square: "rounded-lg",
+    circle: "rounded-full aspect-square justify-center",
   };
 
   const iconSizes = {
     sm: 16,
-    md: 20,
-    lg: 24,
+    md: 18,
+    lg: 22,
   };
+
+  const currentSize = sizes[size] || sizes.md;
 
   return (
     <button
@@ -45,12 +62,14 @@ function Button({
         hover:shadow-lg
         transition
         duration-300
+        ${currentSize.text}
+        ${currentSize.padding}
         ${variants[variant] || variants.primary}
         ${shapes[shape] || shapes.rounded}
         ${className}
       `}
     >
-      {Icon && <Icon size={iconSizes[size] || 20} />}
+      {Icon && <Icon size={iconSizes[size] || 18} />}
       {shape !== "circle" && children}
     </button>
   );

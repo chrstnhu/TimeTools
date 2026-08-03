@@ -41,46 +41,49 @@ function DateCalculator() {
   };
 
   return (
-    <div className="mx-auto max-w-5xl flex justify-center xl:flex-row sm:flex-col gap-8 p-4">
-      {/* ─── CALENDAR PICKER CARD ─── */}
-      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)]">
-        <div className="space-y-6 mb-10">
-          <PageTitle
-            title={currentItem.title}
-            icon={<currentItem.icon />}
-            label={currentItem.label}
-            withBorder={true}
-          />
-
-          <div className="flex justify-center p-3 rounded-2xl">
-            <DayPicker
-              captionLayout="dropdown"
-              navLayout="after"
-              mode="range"
-              selected={range}
-              onSelect={setRange}
-              classNames={{
-                months: "flex justify-center",
-                caption: "text-base font-bold text-[var(--text)]",
-                nav_button:
-                  "text-[var(--primary)] hover:bg-[var(--primary)]/10 rounded-lg",
-                chevron:
-                  "fill-[var(--primary)] stroke-[var(--primary)] text-[var(--primary)]",
-                weekday: "text-xs font-semibold text-gray-400",
-                today:
-                  "border border-[var(--primary)] text-[var(--primary)] font-bold",
-                day: "text-sm text-[var(--text)] hover:bg-[var(--primary)]/20 rounded-xl transition-all",
-                range_start:
-                  "!bg-[var(--primary)] !text-white font-bold rounded-l-xl",
-                range_middle:
-                  "!bg-[var(--primary)]/20 !text-[var(--primary)] font-bold rounded-none",
-                range_end:
-                  "!bg-[var(--primary)] !text-white font-bold rounded-r-xl",
-                selected:
-                  "!bg-[var(--primary)] !bg-[var(--primary)] font-bold rounded-xl",
-                outside: "text-gray-600 opacity-40",
-              }}
+    <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
+      {/* items-stretch égalise la hauteur des deux colonnes principal de la grille */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-stretch">
+        {/* ─── LEFT COLUMN: CALENDAR PICKER CARD ─── */}
+        <Card className="p-8 shadow-md rounded-3xl w-full h-full bg-[var(--surface)] flex flex-col justify-between gap-6">
+          <div className="flex flex-col gap-6">
+            <PageTitle
+              title={currentItem.title}
+              icon={<currentItem.icon />}
+              label={currentItem.label}
+              withBorder={true}
             />
+
+            <div className="flex justify-center p-3 rounded-2xl">
+              <DayPicker
+                captionLayout="dropdown"
+                navLayout="after"
+                mode="range"
+                selected={range}
+                onSelect={setRange}
+                classNames={{
+                  months: "flex justify-center",
+                  caption: "text-base font-bold text-[var(--text)]",
+                  nav_button:
+                    "text-[var(--primary)] hover:bg-[var(--primary)]/10 rounded-lg",
+                  chevron:
+                    "fill-[var(--primary)] stroke-[var(--primary)] text-[var(--primary)]",
+                  weekday: "text-xs font-semibold text-gray-400",
+                  today:
+                    "border border-[var(--primary)] text-[var(--primary)] font-bold",
+                  day: "text-sm text-[var(--text)] hover:bg-[var(--primary)]/20 rounded-xl transition-all",
+                  range_start:
+                    "!bg-[var(--primary)] !text-white font-bold rounded-l-xl",
+                  range_middle:
+                    "!bg-[var(--primary)]/20 !text-[var(--primary)] font-bold rounded-none",
+                  range_end:
+                    "!bg-[var(--primary)] !text-white font-bold rounded-r-xl",
+                  selected:
+                    "!bg-[var(--primary)] !bg-[var(--primary)] font-bold rounded-xl",
+                  outside: "text-gray-600 opacity-40",
+                }}
+              />
+            </div>
           </div>
 
           {/* ─── SWITCH & RESET ACTIONS ─── */}
@@ -109,61 +112,61 @@ function DateCalculator() {
               variant="ghost"
               size="sm"
               icon={RotateCcw}
-              shape="halfRounded"
+              shape="square"
             >
               Reset
             </Button>
           </div>
-        </div>
-      </Card>
+        </Card>
 
-      {/* ─── RIGHT COLUMN (RESULT DISPLAY CARD) ─── */}
-      <div className="flex flex-col gap-6 w-full xl:max-w-md">
-        <Card
-          className={`p-8 shadow-lg rounded-3xl transition-all duration-300 ${
-            hasResult
-              ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
-              : "border border-[var(--border)] bg-[var(--surface)] opacity-100"
-          }`}
-        >
-          <div className="flex flex-col gap-6">
-            <ResultTime
-              title="Duration Result"
-              variant="daysOnly"
-              days={days !== null ? days : 0}
-            />
+        {/* ─── RIGHT COLUMN: RESULT DISPLAY CARD ─── */}
+        <div className="flex flex-col gap-6 w-full h-full">
+          <Card
+            className={`p-8 shadow-lg rounded-3xl h-full transition-all duration-300 flex flex-col justify-between ${
+              hasResult
+                ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
+                : "border border-[var(--border)] bg-[var(--surface)] opacity-100"
+            }`}
+          >
+            <div className="flex flex-col gap-6">
+              <ResultTime
+                title="Duration Result"
+                variant="daysOnly"
+                days={days !== null ? days : 0}
+              />
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-between">
-              <div className="p-4 text-left bg-[var(--background)] rounded-2xl w-full">
-                <p className="uppercase tracking-widest text-xs text-gray-400 font-semibold">
-                  Start Date
-                </p>
-                <div className="text-lg font-bold flex items-center gap-1.5 mt-1 text-[var(--text-title)]">
-                  <CalendarIcon size={16} className="text-[var(--primary)]" />
-                  <span>
-                    {range?.from ? range.from.toLocaleDateString() : "-"}
-                  </span>
+              <div className="flex flex-col sm:flex-row gap-4 justify-between">
+                <div className="p-4 text-left bg-[var(--background)] rounded-2xl w-full">
+                  <p className="uppercase tracking-widest text-xs text-gray-400 font-semibold">
+                    Start Date
+                  </p>
+                  <div className="text-lg font-bold flex items-center gap-1.5 mt-1 text-[var(--text-title)]">
+                    <CalendarIcon size={16} className="text-[var(--primary)]" />
+                    <span>
+                      {range?.from ? range.from.toLocaleDateString() : "-"}
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="p-4 text-left bg-[var(--background)] rounded-2xl w-full">
-                <p className="uppercase tracking-widest text-xs text-gray-400 font-semibold">
-                  End Date
-                </p>
-                <div className="text-lg font-bold flex items-center gap-1.5 mt-1 text-[var(--text-title)]">
-                  <CalendarIcon size={16} className="text-[var(--primary)]" />
-                  <span>
-                    {range?.to
-                      ? range.to.toLocaleDateString()
-                      : range?.from
-                        ? range.from.toLocaleDateString()
-                        : "-"}
-                  </span>
+                <div className="p-4 text-left bg-[var(--background)] rounded-2xl w-full">
+                  <p className="uppercase tracking-widest text-xs text-gray-400 font-semibold">
+                    End Date
+                  </p>
+                  <div className="text-lg font-bold flex items-center gap-1.5 mt-1 text-[var(--text-title)]">
+                    <CalendarIcon size={16} className="text-[var(--primary)]" />
+                    <span>
+                      {range?.to
+                        ? range.to.toLocaleDateString()
+                        : range?.from
+                          ? range.from.toLocaleDateString()
+                          : "-"}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
       </div>
     </div>
   );

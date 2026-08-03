@@ -72,31 +72,35 @@ function Chronometer() {
 
   return (
     <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
-      {/* ─── CHRONOMETER ─── */}
-      <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)] border border-[var(--border)]">
-        <div className="flex flex-col gap-6">
-          <PageTitle
-            title={currentItem.title}
-            icon={<currentItem.icon />}
-            label={currentItem.label}
-            withBorder={true}
-          />
+      {/* items-stretch force les éléments de la grille à prendre la même hauteur */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-stretch">
+        
+        {/* ─── CHRONOMETER MAIN CARD ─── */}
+        <Card className="p-8 shadow-md rounded-3xl w-full h-full bg-[var(--surface)] border border-[var(--border)] flex flex-col justify-between gap-6">
+          <div className="flex flex-col gap-6">
+            <PageTitle
+              title={currentItem.title}
+              icon={<currentItem.icon />}
+              label={currentItem.label}
+              withBorder={true}
+            />
 
-          <div className="flex justify-center">
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)]/50 p-6 shadow-inner w-full max-w-md text-center">
-              <p
-                className="text-4xl sm:text-5xl font-black tracking-wider text-[var(--text)]"
-                style={{ fontFamily: "var(--font-mono, monospace)" }}
-              >
-                {chrono.hours}:{chrono.minutes}:{chrono.seconds}
-                <span className="text-[var(--primary)] font-bold text-2xl sm:text-3xl ml-1">
-                  .{chrono.milliseconds}
-                </span>
-              </p>
+            <div className="flex justify-center">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)]/50 p-6 shadow-inner w-full max-w-md text-center">
+                <p
+                  className="text-lg md:text-5xl font-black tracking-wider text-[var(--text)]"
+                  style={{ fontFamily: "var(--font-mono, monospace)" }}
+                >
+                  {chrono.hours}:{chrono.minutes}:{chrono.seconds}
+                  <span className="text-[var(--primary)] font-bold text-sm md:text-3xl ml-1">
+                    .{chrono.milliseconds}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="flex justify-center items-center gap-3 pt-2">
+          <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
             {isStart ? (
               <>
                 <Button
@@ -104,7 +108,7 @@ function Chronometer() {
                   icon={Flag}
                   variant="secondary"
                   size="md"
-                  shape="halfRounded"
+                  shape="square"
                 >
                   Lap
                 </Button>
@@ -113,7 +117,7 @@ function Chronometer() {
                   icon={Pause}
                   variant="primary"
                   size="md"
-                  shape="halfRounded"
+                  shape="square"
                 >
                   Pause
                 </Button>
@@ -122,7 +126,7 @@ function Chronometer() {
                   icon={RotateCcw}
                   variant="ghost"
                   size="md"
-                  shape="halfRounded"
+                  shape="square"
                   disabled={true}
                   className="disabled:bg-[var(--surface-disabled)] disabled:text-[var(--text-disabled)] disabled:cursor-not-allowed"
                 >
@@ -136,7 +140,7 @@ function Chronometer() {
                   icon={Flag}
                   variant="secondary"
                   size="md"
-                  shape="halfRounded"
+                  shape="square"
                   disabled={true}
                   className="disabled:bg-[var(--surface-disabled)] disabled:text-[var(--text-disabled)] disabled:cursor-not-allowed"
                 >
@@ -147,7 +151,7 @@ function Chronometer() {
                   icon={Play}
                   variant="primary"
                   size="md"
-                  shape="halfRounded"
+                  shape="square"
                 >
                   Start
                 </Button>
@@ -156,7 +160,7 @@ function Chronometer() {
                   icon={RotateCcw}
                   variant="ghost"
                   size="md"
-                  shape="halfRounded"
+                  shape="square"
                 >
                   Reset
                 </Button>
@@ -167,58 +171,75 @@ function Chronometer() {
                 icon={Play}
                 variant="primary"
                 size="md"
-                shape="halfRounded"
+                shape="square"
               >
                 Start
               </Button>
             )}
           </div>
+        </Card>
 
-          {/* ─── LAPS LIST ─── */}
-          {laps.length > 0 && (
-            <div className="flex justify-center pt-4">
-              <div className="w-full max-w-lg max-h-64 overflow-y-auto flex flex-col gap-2 rounded-xl border border-[var(--border)] bg-[var(--background)]/30 p-4">
-                <div className="grid grid-cols-3 text-xs font-semibold text-[var(--text)] opacity-70 px-2 pb-2 border-b border-[var(--border)]">
-                  <span className="text-left">Laps</span>
-                  <span className="text-center">Lap Time</span>
-                  <span className="text-right">Total Time</span>
+        {/* ─── LAPS CARD (RIGHT COLUMN) ─── */}
+        <div className="flex flex-col gap-6 w-full h-full">
+          <Card
+            className={`p-8 shadow-lg rounded-3xl h-full transition-all duration-300 flex flex-col justify-between ${
+              laps.length > 0
+                ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
+                : "border border-[var(--border)] bg-[var(--surface)] opacity-100"
+            }`}
+          >
+            <div className="flex flex-col gap-4 h-full justify-start">
+              <h3 className="text-lg font-bold text-[var(--text)]">Laps</h3>
+
+              {laps.length > 0 ? (
+                <div className="max-h-80 overflow-y-auto flex flex-col gap-2 rounded-xl border border-[var(--border)] bg-[var(--background)]/30 p-3">
+                  <div className="grid grid-cols-3 text-xs font-semibold text-[var(--text)] opacity-70 px-2 pb-2 border-b border-[var(--border)]">
+                    <span className="text-left">Lap</span>
+                    <span className="text-center">Time</span>
+                    <span className="text-right">Total</span>
+                  </div>
+
+                  {laps.map((lap) => {
+                    const formattedLap = formatTime(lap.lapTimeMs);
+                    const formattedTotal = formatTime(lap.totalTimeMs);
+
+                    let textColor = "text-[var(--text)]";
+                    if (lap.lapTimeMs === minLapTime) {
+                      textColor = "text-blue-500 font-bold";
+                    } else if (lap.lapTimeMs === maxLapTime) {
+                      textColor = "text-red-500 font-bold";
+                    }
+
+                    return (
+                      <div
+                        key={lap.id}
+                        className="grid grid-cols-3 items-center px-2 py-2 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-sm"
+                      >
+                        <span className="font-medium text-left text-[var(--text)]">
+                          #{lap.id}
+                        </span>
+                        <span className={`font-mono text-center ${textColor}`}>
+                          +{formattedLap.minutes}:{formattedLap.seconds}.
+                          {formattedLap.milliseconds}
+                        </span>
+                        <span className="font-mono text-right text-[var(--text)] opacity-80">
+                          {formattedTotal.minutes}:{formattedTotal.seconds}.
+                          {formattedTotal.milliseconds}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-
-                {laps.map((lap) => {
-                  const formattedLap = formatTime(lap.lapTimeMs);
-                  const formattedTotal = formatTime(lap.totalTimeMs);
-
-                  let textColor = "text-[var(--text)]";
-                  if (lap.lapTimeMs === minLapTime) {
-                    textColor = "text-blue-500 font-bold";
-                  } else if (lap.lapTimeMs === maxLapTime) {
-                    textColor = "text-red-500 font-bold";
-                  }
-
-                  return (
-                    <div
-                      key={lap.id}
-                      className="grid grid-cols-3 items-center px-2 py-2 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-sm"
-                    >
-                      <span className="font-medium text-left text-[var(--text)]">
-                        {lap.id}
-                      </span>
-                      <span className={`font-mono text-center ${textColor}`}>
-                        +{formattedLap.minutes}:{formattedLap.seconds}.
-                        {formattedLap.milliseconds}
-                      </span>
-                      <span className="font-mono text-right text-[var(--text)] opacity-80">
-                        {formattedTotal.minutes}:{formattedTotal.seconds}.
-                        {formattedTotal.milliseconds}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+              ) : (
+                <div className="flex items-center justify-center h-full min-h-[150px] text-sm text-gray-400">
+                  No laps recorded yet.
+                </div>
+              )}
             </div>
-          )}
+          </Card>
         </div>
-      </Card>
+
+      </div>
     </div>
   );
 }

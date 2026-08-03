@@ -40,12 +40,6 @@ export default function TimeInterval({ currentItem, mode, setMode }) {
     { id: "interval", label: "Interval", icon: ArrowRightLeft },
   ];
 
-  const dayOptions = [
-    { id: -1, label: "Yesterday" },
-    { id: 0, label: "Today" },
-    { id: 1, label: "Tomorrow" },
-  ];
-
   const handleCalculate = () => {
     const s1 =
       (Number(durTime1.h) || 0) * 3600 +
@@ -114,205 +108,233 @@ export default function TimeInterval({ currentItem, mode, setMode }) {
 
   return (
     <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-start">
-        <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)] flex flex-col gap-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[var(--border)]">
-            {currentItem && (
-              <PageTitle
-                title={currentItem.title}
-                icon={currentItem.icon ? <currentItem.icon /> : null}
-                label={currentItem.label}
-              />
-            )}
+      {/* items-stretch aligne parfaitement les hauteurs des deux colonnes */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-stretch">
+        {/* ─── LEFT COLUMN: TIME INTERVAL INPUTS ─── */}
+        <Card className="p-8 shadow-md rounded-3xl w-full h-full bg-[var(--surface)] flex flex-col justify-between gap-6">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4 pb-6 border-b border-[var(--border)] text-center sm:text-left">
+              {currentItem && (
+                <PageTitle
+                  title={currentItem.title}
+                  icon={currentItem.icon ? <currentItem.icon /> : null}
+                  label={currentItem.label}
+                />
+              )}
 
-            <ModeSelector
-              modes={timeModes}
-              currentMode={mode}
-              onModeChange={setMode}
-            />
+              <ModeSelector
+                modes={timeModes}
+                currentMode={mode}
+                onModeChange={setMode}
+              />
+            </div>
+
+            <div className="space-y-6">
+              {/* Start Time */}
+              <div>
+                <div className="mb-3 flex flex-wrap items-center justify-center sm:justify-between gap-2">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <Clock3
+                      size={18}
+                      className="text-[var(--primary)] shrink-0"
+                    />
+                    <h3 className="font-semibold text-sm">Start time</h3>
+                  </div>
+
+                  <div className="relative flex items-center gap-0.5 sm:gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
+                    <Calendar
+                      size={14}
+                      className="text-[var(--primary)] ml-1 relative z-10 shrink-0"
+                    />
+
+                    {[-1, 0, 1].map((offset) => {
+                      const isSelected = day1Offset === offset;
+                      return (
+                        <Button
+                          key={offset}
+                          type="button"
+                          onClick={() => setDay1Offset(offset)}
+                          variant="ghost"
+                          size="sm"
+                          shape="square"
+                          className={`relative z-10 text-xs px-1.5 sm:px-2 py-1 h-auto border-none transition-colors ${
+                            isSelected
+                              ? "!text-white"
+                              : "text-[var(--text-secondary)] hover:text-[var(--text)]"
+                          }`}
+                        >
+                          {isSelected && (
+                            <motion.div
+                              layoutId="activeDay1"
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 30,
+                              }}
+                              className="absolute inset-0 bg-[var(--primary)] rounded-lg -z-10"
+                            />
+                          )}
+                          <span className="hidden sm:inline">
+                            {offset === -1
+                              ? "Yesterday"
+                              : offset === 0
+                                ? "Today"
+                                : "Tomorrow"}
+                          </span>
+                          <span className="sm:hidden">
+                            {offset === -1
+                              ? "Yest."
+                              : offset === 0
+                                ? "Today"
+                                : "Tom."}
+                          </span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <TimeInput
+                  id="durTime1"
+                  value={durTime1}
+                  onChange={setDurTime1}
+                  maxHours={23}
+                />
+              </div>
+
+              <Divider
+                sx={{
+                  "&::before, &::after": {
+                    borderColor: "var(--border)",
+                    mb: 3,
+                  },
+                }}
+              >
+                <Chip
+                  label="Elapsed Time Span"
+                  icon={<ArrowRight size={14} />}
+                  sx={{
+                    bgcolor: "var(--primary)",
+                    color: "white",
+                    fontWeight: 700,
+                    fontSize: "0.75rem",
+                    px: 1,
+                    mb: 3,
+                    "& .MuiChip-icon": { color: "white" },
+                  }}
+                />
+              </Divider>
+
+              {/* End Time */}
+              <div>
+                <div className="mb-3 flex flex-wrap items-center justify-center sm:justify-between gap-2">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <Clock9
+                      size={18}
+                      className="text-[var(--primary)] shrink-0"
+                    />
+                    <h3 className="font-semibold text-sm">End time (To)</h3>
+                  </div>
+
+                  <div className="relative flex items-center gap-0.5 sm:gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
+                    <Calendar
+                      size={14}
+                      className="text-[var(--primary)] ml-1 relative z-10 shrink-0"
+                    />
+
+                    {[-1, 0, 1].map((offset) => {
+                      const isSelected = day2Offset === offset;
+                      return (
+                        <Button
+                          key={offset}
+                          type="button"
+                          onClick={() => setDay2Offset(offset)}
+                          variant="ghost"
+                          size="sm"
+                          shape="square"
+                          className={`relative z-10 px-1.5 sm:px-2 py-1 h-auto text-xs border-none transition-colors ${
+                            isSelected
+                              ? "!text-white"
+                              : "text-[var(--text-secondary)] hover:text-[var(--text)]"
+                          }`}
+                        >
+                          {isSelected && (
+                            <motion.div
+                              layoutId="activeDay2"
+                              transition={{
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 30,
+                              }}
+                              className="absolute inset-0 bg-[var(--primary)] rounded-lg -z-10"
+                            />
+                          )}
+                          <span className="hidden sm:inline">
+                            {offset === -1
+                              ? "Yesterday"
+                              : offset === 0
+                                ? "Today"
+                                : "Tomorrow"}
+                          </span>
+                          <span className="sm:hidden">
+                            {offset === -1
+                              ? "Yest."
+                              : offset === 0
+                                ? "Today"
+                                : "Tom."}
+                          </span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <TimeInput
+                  id="durTime2"
+                  value={durTime2}
+                  onChange={setDurTime2}
+                  maxHours={23}
+                />
+                {errorMsg && (
+                  <p className="text-red-500 text-xs mt-1.5 font-medium text-center sm:text-left">
+                    {errorMsg}
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-6">
-            {/* Start Time */}
-            <div>
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock3 size={18} className="text-[var(--primary)]" />
-                  <h3 className="font-semibold text-sm">Start Time (From)</h3>
-                </div>
-
-                <div className="relative flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
-                  <Calendar
-                    size={14}
-                    className="text-[var(--primary)] ml-1 relative z-10"
-                  />
-
-                  {[-1, 0, 1].map((offset) => {
-                    const isSelected = day1Offset === offset;
-                    return (
-                      <Button
-                        key={offset}
-                        type="button"
-                        onClick={() => setDay1Offset(offset)}
-                        variant="ghost"
-                        size="sm"
-                        shape="square"
-                        className={`relative z-10 text-xs px-2 py-1 h-auto border-none transition-colors ${
-                          isSelected
-                            ? "!text-white"
-                            : "text-[var(--text-secondary)] hover:text-[var(--text)]"
-                        }`}
-                      >
-                        {isSelected && (
-                          <motion.div
-                            layoutId="activeDay1"
-                            transition={{
-                              type: "spring",
-                              stiffness: 400,
-                              damping: 30,
-                            }}
-                            className="absolute inset-0 bg-[var(--primary)] rounded-lg -z-10"
-                          />
-                        )}
-                        {offset === -1
-                          ? "Yesterday"
-                          : offset === 0
-                            ? "Today"
-                            : "Tomorrow"}
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <TimeInput
-                id="durTime1"
-                value={durTime1}
-                onChange={setDurTime1}
-                maxHours={23}
-              />
-            </div>
-
-            <Divider
-              sx={{
-                "&::before, &::after": {
-                  borderColor: "var(--border)",
-                  mb: 3,
-                },
-              }}
+          <div className="pt-4 flex flex-wrap gap-4">
+            <Button
+              type="button"
+              onClick={handleCalculate}
+              variant="primary"
+              shape="square"
+              size="md"
+              icon={Calculator}
+              className="flex-1"
             >
-              <Chip
-                label="Elapsed Time Span"
-                icon={<ArrowRight size={14} />}
-                sx={{
-                  bgcolor: "var(--primary)",
-                  color: "white",
-                  fontWeight: 700,
-                  fontSize: "0.75rem",
-                  px: 1,
-                  mb: 3,
-                  "& .MuiChip-icon": { color: "white" },
-                }}
-              />
-            </Divider>
+              Calculate
+            </Button>
 
-            {/* End Time */}
-            <div>
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock9 size={18} className="text-[var(--primary)]" />
-                  <h3 className="font-semibold text-sm">End Time (To)</h3>
-                </div>
-
-                <div className="relative flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
-                  <Calendar
-                    size={14}
-                    className="text-[var(--primary)] ml-1 relative z-10"
-                  />
-
-                  {[-1, 0, 1].map((offset) => {
-                    const isSelected = day2Offset === offset;
-                    return (
-                      <Button
-                        key={offset}
-                        type="button"
-                        onClick={() => setDay2Offset(offset)}
-                        variant="ghost"
-                        size="sm"
-                        shape="square"
-                        className={`relative z-10 px-2 py-1 h-auto text-xs border-none transition-colors ${
-                          isSelected
-                            ? "!text-white"
-                            : "text-[var(--text-secondary)] hover:text-[var(--text)]"
-                        }`}
-                      >
-
-                        {isSelected && (
-                          <motion.div
-                            layoutId="activeDay2"
-                            transition={{
-                              type: "spring",
-                              stiffness: 400,
-                              damping: 30,
-                            }}
-                            className="absolute inset-0 bg-[var(--primary)] rounded-lg -z-10"
-                          />
-                        )}
-                        {offset === -1
-                          ? "Yesterday"
-                          : offset === 0
-                            ? "Today"
-                            : "Tomorrow"}
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <TimeInput
-                id="durTime2"
-                value={durTime2}
-                onChange={setDurTime2}
-                maxHours={23}
-              />
-              {errorMsg && (
-                <p className="text-red-500 text-xs mt-1.5 font-medium">
-                  {errorMsg}
-                </p>
-              )}
-            </div>
-
-            <div className="pt-4 flex gap-4">
-              <Button
-                type="button"
-                onClick={handleCalculate}
-                variant="primary"
-                shape="halfRounded"
-                size="md"
-                icon={Calculator}
-                className="flex-1"
-              >
-                Calculate Duration
-              </Button>
-
-              <Button
-                type="button"
-                onClick={handleReset}
-                variant="secondary"
-                shape="halfRounded"
-                size="md"
-                icon={RotateCcw}
-                className="flex-1"
-              >
-                Reset
-              </Button>
-            </div>
+            <Button
+              type="button"
+              onClick={handleReset}
+              variant="secondary"
+              shape="square"
+              size="md"
+              icon={RotateCcw}
+              className="flex-1"
+            >
+              Reset
+            </Button>
           </div>
         </Card>
 
-        <div className="flex flex-col gap-6 w-full xl:max-w-md">
+        {/* ─── RIGHT COLUMN: RESULT CARD ─── */}
+        <div className="flex flex-col gap-6 w-full h-full">
           <Card
-            className={`p-8 shadow-lg rounded-3xl transition-all duration-300 ${
+            className={`p-8 shadow-lg rounded-3xl h-full transition-all duration-300 flex flex-col justify-between ${
               hasResult
                 ? "border-2 border-[var(--primary)] bg-[var(--primary)]/10 opacity-100"
                 : "border border-[var(--border)] bg-[var(--surface)] opacity-100"

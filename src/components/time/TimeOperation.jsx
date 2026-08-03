@@ -5,8 +5,8 @@ import TimeInput from "@/components/forms/TimeInput";
 import Button from "@/components/ui/Button";
 import Divider from "@mui/material/Divider";
 import Chip from "@mui/material/Chip";
-import PageTitle from "@/components/ui/PageTitle"; // Importez PageTitle ici
-import { Calculator, ArrowRightLeft } from "lucide-react"; // Importez les icônes de mode
+import PageTitle from "@/components/ui/PageTitle";
+import { Calculator, ArrowRightLeft } from "lucide-react";
 import {
   Clock3,
   Clock9,
@@ -53,7 +53,6 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
     { id: "calculator", label: "Calculator", icon: Calculator },
     { id: "interval", label: "Interval", icon: ArrowRightLeft },
   ];
-
 
   function handleCalculate(operation) {
     const first = timeToSeconds(time1);
@@ -121,124 +120,129 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
 
   return (
     <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-start">
-        <Card className="p-8 shadow-md rounded-3xl w-full bg-[var(--surface)] flex flex-col gap-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-[var(--border)]">
-            <PageTitle
-              title={currentItem.title}
-              icon={currentItem.icon ? <currentItem.icon /> : null}
-              label={currentItem.label}
-            />
+      {/* items-stretch égalise la hauteur des deux colonnes principal de la grille */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-stretch">
+        {/* ─── LEFT COLUMN: TIME INPUTS CARD ─── */}
+        <Card className="p-8 shadow-md rounded-3xl w-full h-full bg-[var(--surface)] flex flex-col justify-between gap-6">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start sm:justify-between gap-4 pb-6 border-b border-[var(--border)]">
+              <PageTitle
+                title={currentItem.title}
+                icon={currentItem.icon ? <currentItem.icon /> : null}
+                label={currentItem.label}
+              />
 
-            <ModeSelector
-              modes={timeModes}
-              currentMode={mode}
-              onModeChange={setMode}
-            />
+              <ModeSelector
+                modes={timeModes}
+                currentMode={mode}
+                onModeChange={setMode}
+              />
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <div className="mb-3 flex items-center gap-2">
+                  <Clock3 size={18} className="text-[var(--primary)]" />
+                  <h3 className="font-semibold text-sm">First time</h3>
+                </div>
+                <TimeInput
+                  id="time1"
+                  value={time1}
+                  onChange={setTime1}
+                  maxHours={999}
+                />
+              </div>
+
+              <Divider
+                sx={{
+                  "&::before, &::after": {
+                    borderColor: "var(--border)",
+                    mb: 3,
+                  },
+                }}
+              >
+                <Chip
+                  label={getChipLabel()}
+                  sx={{
+                    bgcolor: "var(--primary)",
+                    color: "white",
+                    fontWeight: 700,
+                    fontSize: "0.75rem",
+                    px: 1,
+                    mb: 3,
+                  }}
+                />
+              </Divider>
+
+              <div>
+                <div className="mb-3 flex items-center gap-2">
+                  <Clock9 size={18} className="text-[var(--primary)]" />
+                  <h3 className="font-semibold text-sm">Second time</h3>
+                </div>
+                <TimeInput
+                  label=""
+                  id="time2"
+                  value={time2}
+                  onChange={setTime2}
+                  maxHours={999}
+                />
+              </div>
+
+              {errorMsg && (
+                <p className="text-sm text-red-500 mt-2">{errorMsg}</p>
+              )}
+            </div>
           </div>
 
-          <div className="space-y-6">
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <Clock3 size={18} className="text-[var(--primary)]" />
-                <h3 className="font-semibold text-sm">First time</h3>
-              </div>
-              <TimeInput
-                id="time1"
-                value={time1}
-                onChange={setTime1}
-                maxHours={999}
-              />
-            </div>
-
-            <Divider
-              sx={{
-                "&::before, &::after": {
-                  borderColor: "var(--border)",
-                  mb: 3,
-                },
-              }}
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <Button
+              type="button"
+              onClick={() => handleCalculate("+")}
+              variant="primary"
+              shape="square"
+              size="md"
+              icon={Plus}
             >
-              <Chip
-                label={getChipLabel()}
-                sx={{
-                  bgcolor: "var(--primary)",
-                  color: "white",
-                  fontWeight: 700,
-                  fontSize: "0.75rem",
-                  px: 1,
-                  mb: 3,
-                }}
-              />
-            </Divider>
+              Add
+            </Button>
 
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <Clock9 size={18} className="text-[var(--primary)]" />
-                <h3 className="font-semibold text-sm">Second time</h3>
-              </div>
-              <TimeInput
-                label=""
-                id="time2"
-                value={time2}
-                onChange={setTime2}
-                maxHours={999}
-              />
-            </div>
+            <Button
+              type="button"
+              onClick={() => handleCalculate("-")}
+              variant="primary"
+              shape="square"
+              size="md"
+              icon={Minus}
+            >
+              Subtract
+            </Button>
 
-            {errorMsg && (
-              <p className="text-sm text-red-500 mt-2">{errorMsg}</p>
-            )}
+            <Button
+              type="button"
+              onClick={handleKeep}
+              variant="secondary"
+              shape="square"
+              size="md"
+              icon={BookmarkPlus}
+            >
+              Keep Result
+            </Button>
 
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <Button
-                type="button"
-                onClick={() => handleCalculate("+")}
-                variant="primary"
-                shape="halfRounded"
-                size="md"
-                icon={Plus}
-              >
-                Add
-              </Button>
-
-              <Button
-                type="button"
-                onClick={() => handleCalculate("-")}
-                variant="primary"
-                shape="halfRounded"
-                size="md"
-                icon={Minus}
-              >
-                Subtract
-              </Button>
-
-              <Button
-                type="button"
-                onClick={handleKeep}
-                variant="secondary"
-                shape="halfRounded"
-                size="md"
-                icon={BookmarkPlus}
-              >
-                Keep Result
-              </Button>
-
-              <Button
-                type="button"
-                onClick={handleReset}
-                variant="ghost"
-                shape="halfRounded"
-                size="md"
-                icon={RotateCcw}
-              >
-                Reset
-              </Button>
-            </div>
+            <Button
+              type="button"
+              onClick={handleReset}
+              variant="ghost"
+              shape="square"
+              size="md"
+              icon={RotateCcw}
+            >
+              Reset
+            </Button>
           </div>
         </Card>
 
-        <div className="flex flex-col gap-6 w-full xl:max-w-md">
+        {/* ─── RIGHT COLUMN: RESULT & HISTORY ─── */}
+        <div className="flex flex-col gap-6 w-full h-full justify-between">
           <Card
             className={`p-8 shadow-lg rounded-3xl transition-all duration-300 ${
               hasResult
@@ -290,7 +294,7 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
                 No calculations yet.
               </p>
             ) : (
-              <ul className="space-y-2 max-h-40 overflow-y-auto pr-1">
+              <ul className="space-y-2 max-h-36 overflow-y-auto pr-1">
                 {history.map((entry, index) => (
                   <li
                     key={index}

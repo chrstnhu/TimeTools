@@ -9,7 +9,7 @@ function CalculatorButtons({ onAdd, onSubtract, onReset, onKeep }) {
         type="button"
         onClick={onAdd}
         variant="primary"
-        shape="halfRounded"
+        shape="square"
         size="md"
         className="flex-1 sm:flex-initial min-w-[100px]"
       >
@@ -21,7 +21,7 @@ function CalculatorButtons({ onAdd, onSubtract, onReset, onKeep }) {
         type="button"
         onClick={onSubtract}
         variant="primary"
-        shape="halfRounded"
+        shape="square"
         size="md"
         className="flex-1 sm:flex-initial min-w-[100px]"
       >
@@ -33,7 +33,7 @@ function CalculatorButtons({ onAdd, onSubtract, onReset, onKeep }) {
         type="button"
         onClick={onReset}
         variant="ghost"
-        shape="halfRounded"
+        shape="square"
         size="md"
         className="opacity-80 hover:opacity-100"
       >
@@ -45,7 +45,7 @@ function CalculatorButtons({ onAdd, onSubtract, onReset, onKeep }) {
         type="button"
         onClick={onKeep}
         variant="ghost"
-        shape="halfRounded"
+        shape="square"
         size="md"
         className="opacity-80 hover:opacity-100 "
       >
