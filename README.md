@@ -4,7 +4,7 @@ A web-based time utility application built with React and Vite. TimeTool provide
 
 > [Demo site](https://time-tools-git-main-chrstnhus-projects.vercel.app/)
 
-![Demo TimeTools](assets/Timetool-visual.gif)
+![Demo TimeTools](src/assets/Timetool-visual.gif)
 
 ## 📋 Table of Contents
 
