@@ -2,8 +2,31 @@ import Input from "../ui/Input";
 
 function InputTime({ value, onChange, label, min = 0, max = 59, ...props }) {
   const handleChange = (e) => {
-    const newValue = Math.min(max, Math.max(min, Number(e.target.value) || 0));
+    const rawValue = e.target.value;
+
+    if (rawValue === "") {
+      onChange("");
+      return;
+    }
+
+    const newValue = Math.min(
+      max,
+      Math.max(min, Number(rawValue))
+    );
+
     onChange(newValue);
+  };
+
+  const handleFocus = (e) => {
+    if (Number(value) === 0) {
+      e.target.select();
+    }
+  };
+
+  const handleBlur = () => {
+    if (value === "" || value == null) {
+      onChange(0);
+    }
   };
 
   return (
@@ -13,6 +36,8 @@ function InputTime({ value, onChange, label, min = 0, max = 59, ...props }) {
         value={value}
         min={min}
         max={max}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         onChange={handleChange}
         className="
           w-full
