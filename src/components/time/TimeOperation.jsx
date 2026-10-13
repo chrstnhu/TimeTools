@@ -16,6 +16,7 @@ import {
   Minus,
   RotateCcw,
   BookmarkPlus,
+  Check,
 } from "lucide-react";
 import ResultTime from "@/components/time/ResultTime";
 import SummaryGrid from "@/components/ui/SummaryGrid";
@@ -29,25 +30,45 @@ function timeToSeconds(time) {
   );
 }
 
-export default function TimeOperation({ currentItem, mode, setMode }) {
+export default function TimeOperation({
+  currentItem,
+  mode,
+  setMode,
+}) {
   const initialResult = {
     total: { h: 0, m: 0, s: 0 },
     days: { d: 0, h: 0, m: 0, s: 0 },
   };
 
-  const [time1, setTime1] = useState({ h: 0, m: 0, s: 0 });
-  const [time2, setTime2] = useState({ h: 0, m: 0, s: 0 });
+  const zeroTime = { h: 0, m: 0, s: 0 };
+
+  const [time1, setTime1] = useState({ ...zeroTime });
+  const [time2, setTime2] = useState({ ...zeroTime });
 
   const [result, setResult] = useState(initialResult);
   const [hasResult, setHasResult] = useState(false);
-
   const [activeOperation, setActiveOperation] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
 
   const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem("timeCalculatorHistory");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem("timeCalculatorHistory");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
   });
+
+  const [keepMode, setKeepMode] = useState(() => {
+    return (
+      localStorage.getItem("timeCalculatorKeepMode") || "manual"
+    );
+  });
+
+  function handleKeepModeChange(newMode) {
+    setKeepMode(newMode);
+    localStorage.setItem("timeCalculatorKeepMode", newMode);
+  }
 
   const timeModes = [
     { id: "calculator", label: "Calculator", icon: Calculator },
@@ -58,16 +79,18 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
     const first = timeToSeconds(time1);
     const second = timeToSeconds(time2);
 
+    // Validate subtraction before calculating.
     if (operation === "-" && first < second) {
       setErrorMsg(
-        "The first time must be greater than or equal to the second time for subtraction.",
+        "The first time must be greater than or equal to the second time for subtraction."
       );
-    } else {
-      setErrorMsg("");
+      return;
     }
 
-    let total = operation === "+" ? first + second : first - second;
-    total = Math.max(0, total);
+    setErrorMsg("");
+
+    const total =
+      operation === "+" ? first + second : first - second;
 
     const calculatedResult = secondsToTime(total);
 
@@ -75,23 +98,34 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
     setHasResult(true);
     setActiveOperation(operation);
 
+    // Automatic mode: reuse the result immediately.
+    if (keepMode === "auto") {
+      setTime1(calculatedResult.total);
+      setTime2({ ...zeroTime });
+    }
+
     const newCalculation = {
       time1: `${time1.h}h ${time1.m}m ${time1.s}s`,
       time2: `${time2.h}h ${time2.m}m ${time2.s}s`,
-      operation: operation,
+      operation,
       result: `${calculatedResult.total.h}h ${calculatedResult.total.m}m ${calculatedResult.total.s}s`,
     };
 
     setHistory((prevHistory) => {
       const updated = [newCalculation, ...prevHistory].slice(0, 10);
-      localStorage.setItem("timeCalculatorHistory", JSON.stringify(updated));
+
+      localStorage.setItem(
+        "timeCalculatorHistory",
+        JSON.stringify(updated)
+      );
+
       return updated;
     });
   }
 
   function handleReset() {
-    setTime1({ h: 0, m: 0, s: 0 });
-    setTime2({ h: 0, m: 0, s: 0 });
+    setTime1({ ...zeroTime });
+    setTime2({ ...zeroTime });
     setResult(initialResult);
     setHasResult(false);
     setActiveOperation(null);
@@ -99,8 +133,10 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
   }
 
   function handleKeep() {
-    setTime1(result.total);
-    setTime2({ h: 0, m: 0, s: 0 });
+    if (!hasResult) return;
+
+    setTime1({ ...result.total });
+    setTime2({ ...zeroTime });
     setResult(initialResult);
     setHasResult(false);
     setActiveOperation(null);
@@ -112,11 +148,11 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
     localStorage.removeItem("timeCalculatorHistory");
   }
 
-  const getChipLabel = () => {
+  function getChipLabel() {
     if (activeOperation === "+") return "+ Addition +";
     if (activeOperation === "-") return "- Subtraction -";
     return "Operation";
-  };
+  }
 
   return (
     <div className="mx-auto max-w-5xl flex flex-col gap-6 p-4">
@@ -139,12 +175,16 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
               />
             </div>
 
+            {/* Time inputs */}
             <div className="space-y-6">
+
+              {/* First time */}
               <div>
                 <div className="mb-3 flex items-center gap-2">
                   <Clock3 size={18} className="text-[var(--primary)]" />
                   <h3 className="font-semibold text-sm">First time</h3>
                 </div>
+
                 <TimeInput
                   id="time1"
                   value={time1}
@@ -153,6 +193,7 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
                 />
               </div>
 
+              {/* Operation indicator */}
               <Divider
                 sx={{
                   "&::before, &::after": {
@@ -174,11 +215,13 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
                 />
               </Divider>
 
+              {/* Second time */}
               <div>
                 <div className="mb-3 flex items-center gap-2">
                   <Clock9 size={18} className="text-[var(--primary)]" />
                   <h3 className="font-semibold text-sm">Second time</h3>
                 </div>
+
                 <TimeInput
                   label=""
                   id="time2"
@@ -188,57 +231,94 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
                 />
               </div>
 
+              {/* Error */}
               {errorMsg && (
                 <p className="text-sm text-red-500 mt-2">{errorMsg}</p>
               )}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            <Button
-              type="button"
-              onClick={() => handleCalculate("+")}
-              variant="primary"
-              shape="square"
-              size="md"
-              icon={Plus}
-            >
-              Add
-            </Button>
+          {/* ACTION BUTTONS */}
+          {/* ACTION BUTTONS */}
+<div className="grid grid-cols-2 gap-3 pt-2">
+  {/* Add */}
+  <Button
+    type="button"
+    onClick={() => handleCalculate("+")}
+    variant="primary"
+    shape="square"
+    size="md"
+    icon={Plus}
+  >
+    Add
+  </Button>
 
-            <Button
-              type="button"
-              onClick={() => handleCalculate("-")}
-              variant="primary"
-              shape="square"
-              size="md"
-              icon={Minus}
-            >
-              Subtract
-            </Button>
+  {/* Subtract */}
+  <Button
+    type="button"
+    onClick={() => handleCalculate("-")}
+    variant="primary"
+    shape="square"
+    size="md"
+    icon={Minus}
+  >
+    Subtract
+  </Button>
 
-            <Button
-              type="button"
-              onClick={handleKeep}
-              variant="secondary"
-              shape="square"
-              size="md"
-              icon={BookmarkPlus}
-            >
-              Keep Result
-            </Button>
+  {/* Keep result + Auto */}
+  <div className="flex min-w-0 flex-col gap-1 rounded-xl border border-[var(--border)] p-1 sm:flex-row sm:items-stretch sm:gap-0 sm:p-0">
+    <button
+      type="button"
+      onClick={handleKeep}
+      disabled={!hasResult}
+      className="flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-lg px-1.5 py-3 text-sm font-medium transition-colors hover:bg-[var(--primary)]/10 disabled:cursor-not-allowed disabled:opacity-40 sm:px-2"
+    >
+      <BookmarkPlus size={17} className="shrink-0" />
+      <span className="truncate">Keep result</span>
+    </button>
 
-            <Button
-              type="button"
-              onClick={handleReset}
-              variant="ghost"
-              shape="square"
-              size="md"
-              icon={RotateCcw}
-            >
-              Reset
-            </Button>
-          </div>
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={keepMode === "auto"}
+      aria-label="Auto"
+      title="Automatic result retention"
+      onClick={() =>
+        handleKeepModeChange(
+          keepMode === "auto" ? "manual" : "auto"
+        )
+      }
+      className={`flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-medium transition-colors sm:border-l sm:border-[var(--border)] sm:px-2.5 ${
+        keepMode === "auto"
+          ? "bg-[var(--primary)]/10 text-[var(--primary)]"
+          : "text-gray-400 hover:bg-[var(--primary)]/5"
+      }`}
+    >
+      <span
+        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+          keepMode === "auto"
+            ? "border-[var(--primary)] bg-[var(--primary)] text-white"
+            : "border-current"
+        }`}
+      >
+        {keepMode === "auto" && <Check size={12} />}
+      </span>
+      <span>Auto</span>
+    </button>
+  </div>
+
+  {/* Reset stays beside Keep result */}
+  <Button
+    type="button"
+    onClick={handleReset}
+    variant="ghost"
+    shape="square"
+    size="md"
+    icon={RotateCcw}
+  >
+    Reset
+  </Button>
+</div>
         </Card>
 
         {/* ─── RIGHT COLUMN: RESULT & HISTORY ─── */}
@@ -280,6 +360,7 @@ export default function TimeOperation({ currentItem, mode, setMode }) {
               </div>
               {history.length > 0 && (
                 <button
+                  type="button"
                   onClick={handleClearHistory}
                   className="text-xs flex items-center gap-1 font-medium px-2.5 py-1 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all cursor-pointer"
                   title="Clear history"
