@@ -34,7 +34,9 @@ function DateCalculator() {
 
   const days = getDaysDifference();
   const hasResult = days !== null;
-
+  const weeks = days !== null ? Math.floor(days / 7) : 0;
+  const remainingDays = days !== null ? days % 7 : 0;
+  
   const handleReset = () => {
     setRange(undefined);
     setIncludeStart(false);
@@ -61,6 +63,8 @@ function DateCalculator() {
                 mode="range"
                 selected={range}
                 onSelect={setRange}
+                startMonth={new Date(1900, 0)}
+                endMonth={new Date(2100, 11)}
                 classNames={{
                   months: "flex justify-center",
                   caption: "text-base font-bold text-[var(--text)]",
@@ -134,6 +138,26 @@ function DateCalculator() {
                 variant="daysOnly"
                 days={days !== null ? days : 0}
               />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 bg-[var(--background)] rounded-2xl">
+                  <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold">
+                    Total Weeks
+                  </p>
+                  <p className="text-2xl font-bold text-[var(--primary)] mt-2">
+                    {weeks} {weeks > 1 ? "weeks" : "week"}
+                  </p>
+                </div>
+
+                <div className="p-4 bg-[var(--background)] rounded-2xl">
+                  <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold">
+                    Remaining Days
+                  </p>
+                  <p className="text-2xl font-bold text-[var(--primary)] mt-2">
+                    {remainingDays} {remainingDays > 1 ? "days" : "day"}
+                  </p>
+                </div>
+              </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-between">
                 <div className="p-4 text-left bg-[var(--background)] rounded-2xl w-full">
