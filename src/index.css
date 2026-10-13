@@ -2,17 +2,55 @@
 
 @import "tailwindcss";
 
+/* =========================
+   GLOBAL RESET & LAYOUT
+========================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* =========================
+   TYPOGRAPHY & FONTS
+========================= */
+
 :root {
   font-family: Inter, system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 
-  /* Font */
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Dark mode */
+  /* Dark theme */
   --background: #0F0F14;
   --surface: #1C1C25;
   --surface-input: #232331;
@@ -36,54 +74,34 @@
   --ring: #38365F;
 }
 
-/* LIGHT MODE */
+/* =========================
+   LIGHT THEME
+========================= */
+
 .light {
-  /* Background */
   --background: #F4F5F7;
   --surface: #ffffff;
   --surface-input: #EDEDF2;
   --surface-hover: #e2e8f0;
   --surface-disabled: #E5E7EB;
 
-  /* Text */
   --foreground: #0f172a;
   --text: #74749D;
   --text-title: #18181D;
   --text-disabled: #76748a;
   --muted: #64748b;
 
-  /* Accent */
   --primary: #7870E8;
   --primary-hover: #6F68D5;
   --primary-foreground: #ffffff;
 
-  /* Border */
   --border: #F0F0F1;
   --ring: #B8B6DD;
 }
 
-body {
-  margin: 0;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Default logo (Dark mode) */
-.app-logo {
-  content: url("@/assets/Logo-timetool-light.png");
-}
-
-/* Change logo when .light class is active */
-.light .app-logo {
-  content: url("@/assets/Logo-timetool-dark.png");
-}
-
-#root {
-  min-height: 100vh;
-}
-
+/* =========================
+   HEADINGS
+========================= */
 
 h1,
 h2,
@@ -95,6 +113,22 @@ h6 {
   font-weight: 600;
   color: var(--text-title);
 }
+
+/* =========================
+   LOGO
+========================= */
+
+.app-logo {
+  content: url("@/assets/Logo-timetool-light.png");
+}
+
+.light .app-logo {
+  content: url("@/assets/Logo-timetool-dark.png");
+}
+
+/* =========================
+   THEME TRANSITIONS
+========================= */
 
 html,
 body,
@@ -119,7 +153,13 @@ section,
 article,
 header,
 footer {
-  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    fill,
+    stroke,
+    box-shadow;
   transition-duration: 0.4s;
   transition-timing-function: ease-in-out;
 }

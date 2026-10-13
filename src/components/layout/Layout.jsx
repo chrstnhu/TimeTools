@@ -12,20 +12,39 @@ import Timer from "@/pages/Timer";
 
 function Layout() {
   return (
-    <div className="min-h-screen bg-[var(--background)]/90">
+    <div className="min-h-screen w-full min-w-0 overflow-x-clip bg-[var(--background)]/90">
       <Header />
       <Sidebar />
 
-      <div className="sm:ml-16 pt-12 pb-16 sm:p-0">
-        <main className="p-4">
+      {/* Main content */}
+      <div className="box-border w-full min-w-0 pt-16 pb-20 sm:ml-16 sm:w-[calc(100%-4rem)] sm:pt-0 sm:pb-0">
+        <main className="box-border w-full min-w-0 p-3 sm:p-4">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/time-calculator" element={<TimeCalculator />} />
-            <Route path="/time-zone" element={<TimeZoneCalculator />} />
-            <Route path="/date-calculator" element={<DateCalculator />} />
-            <Route path="/day-calculator" element={<DayCalculator />} />
-            <Route path="/age-calculator" element={<AgeCalculator />} />
-            <Route path="/chronometer" element={<Chronometer />} />
+            <Route
+              path="/time-calculator"
+              element={<TimeCalculator />}
+            />
+            <Route
+              path="/time-zone"
+              element={<TimeZoneCalculator />}
+            />
+            <Route
+              path="/date-calculator"
+              element={<DateCalculator />}
+            />
+            <Route
+              path="/day-calculator"
+              element={<DayCalculator />}
+            />
+            <Route
+              path="/age-calculator"
+              element={<AgeCalculator />}
+            />
+            <Route
+              path="/chronometer"
+              element={<Chronometer />}
+            />
             <Route path="/timer" element={<Timer />} />
           </Routes>
         </main>

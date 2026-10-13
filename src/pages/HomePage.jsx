@@ -4,11 +4,13 @@ import { menuItems } from "@/constants/menuItems";
 import { motion } from "framer-motion";
 
 function HomePage() {
-  const filteredMenuItems = menuItems.filter((item) => item.path !== "/");
+  const filteredMenuItems = menuItems.filter(
+    (item) => item.path !== "/"
+  );
 
   return (
-    <div className="mx-auto max-w-6xl p-6 flex justify-center items-center">
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full">
+    <div className="mx-auto flex w-full min-w-0 max-w-6xl items-center justify-center p-3 sm:p-6">
+      <div className="grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {filteredMenuItems.map((item, index) => {
           const Icon = item.icon;
 
@@ -24,57 +26,55 @@ function HomePage() {
                 stiffness: 300,
                 damping: 25,
               }}
+              className="w-full min-w-0"
             >
-              <Link to={item.path} className="group outline-none block h-full">
+              <Link
+                to={item.path}
+                className="group block h-full w-full min-w-0 outline-none"
+              >
                 <Card
                   className="
-                    h-50
-                    p-7
-                    flex
-                    flex-col
-                    items-center
-                    sm:items-start
-                    justify-center
-                    gap-4
-                    cursor-pointer
-                    border-2
+                    flex h-50 w-full min-w-0
+                    flex-col items-center justify-center gap-4
+                    overflow-hidden
+                    rounded-3xl border-2
                     border-[var(--border)]
-                    rounded-3xl
                     bg-[var(--surface)]
+                    p-5 sm:p-7
                     shadow-md
-                    transition-all
-                    duration-300
+                    transition-all duration-300
+                    cursor-pointer
                     hover:-translate-y-1.5
-                    hover:shadow-xl
                     hover:border-[var(--primary)]/50
                     hover:bg-[var(--surface-hover)]
+                    hover:shadow-xl
+                    sm:items-start
                   "
                 >
-                  {/* Icon Container with subtle glow on hover */}
+                  {/* Icon */}
                   <div
                     className="
-                      rounded-2xl
+                      shrink-0 rounded-2xl
                       bg-[var(--primary)]/10
-                      p-4
-                      text-[var(--primary)]
-                      transition-all
-                      duration-300
+                      p-4 text-[var(--primary)]
+                      transition-all duration-300
+                      group-hover:scale-110
                       group-hover:bg-[var(--primary)]
                       group-hover:text-white
-                      group-hover:scale-110
                       group-hover:shadow-md
                     "
                   >
                     <Icon size={28} />
                   </div>
 
-                  <div className="flex flex-col">
-                    <p className="font-bold text-2xl text-center sm:text-start text-[var(--text-title)] transition-colors">
+                  {/* Text */}
+                  <div className="flex w-full min-w-0 flex-col">
+                    <p className="break-words text-center text-2xl font-bold text-[var(--text-title)] transition-colors sm:text-start">
                       {item.name}
                     </p>
 
                     {item.label && (
-                      <p className="font-medium text-sm text-center sm:text-start text-[var(--text)] opacity-75">
+                      <p className="break-words text-center text-sm font-medium text-[var(--text)] opacity-75 sm:text-start">
                         {item.label}
                       </p>
                     )}

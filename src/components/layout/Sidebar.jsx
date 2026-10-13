@@ -12,28 +12,31 @@ function Sidebar() {
   const secondaryMobileItems = menuItems.slice(3);
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 h-16 w-full sm:top-0 sm:h-screen sm:w-16">
-      {/* Menu "more..." for Mobile */}
+    <>
+      {/* MOBILE: MORE MENU */}
       {showMoreMobile && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 sm:hidden"
+          className="fixed inset-0 z-[60] bg-black/50 sm:hidden"
           onClick={() => setShowMoreMobile(false)}
         >
           <div
-            className="absolute bottom-20 right-4 w-48 rounded-2xl bg-[var(--background)] p-2 shadow-2xl border border-white/10 flex flex-col gap-1"
+            className="absolute bottom-20 right-3 flex w-48 max-w-[calc(100vw-1.5rem)] flex-col gap-1 overflow-hidden rounded-2xl border border-white/10 bg-[var(--background)] p-2 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {secondaryMobileItems.map((item) => {
               const Icon = item.icon;
+
               return (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setShowMoreMobile(false)}
-                  className="flex items-center gap-3 rounded-xl p-3 text-[var(--text)] hover:bg-[var(--surface-hover)]"
+                  className="flex min-w-0 items-center gap-3 rounded-xl p-3 text-[var(--text)] hover:bg-[var(--surface-hover)]"
                 >
-                  <Icon size={20} />
-                  <span className="text-sm font-medium">{item.name}</span>
+                  <Icon size={20} className="shrink-0" />
+                  <span className="break-words text-sm font-medium">
+                    {item.name}
+                  </span>
                 </Link>
               );
             })}
@@ -41,49 +44,55 @@ function Sidebar() {
         </div>
       )}
 
+      {/* SIDEBAR */}
       <aside
-        className={`fixed bottom-0 left-0 z-50 flex w-full items-center justify-between border-t border-white/10 bg-[var(--background)] shadow-lg transition-all duration-300 sm:bottom-auto sm:top-0 sm:h-screen sm:flex-col sm:border-t-0 ${
+        className={`fixed inset-x-0 bottom-0 z-50 box-border flex h-16 w-full max-w-full items-center justify-between overflow-hidden border-t border-white/10 bg-[var(--background)] shadow-lg transition-all duration-300 sm:inset-x-auto sm:bottom-auto sm:left-0 sm:top-0 sm:h-screen sm:max-w-none sm:flex-col sm:border-t-0 ${
           isOpen ? "sm:w-60" : "sm:w-16"
         }`}
       >
-        {/* Header Desktop avec Logo */}
+        {/* DESKTOP HEADER */}
         <div
-          className={`hidden h-16 items-center px-4 sm:flex sm:w-full ${
+          className={`hidden h-16 shrink-0 items-center px-4 sm:flex sm:w-full ${
             isOpen ? "justify-between" : "justify-center"
           }`}
         >
-          <div className="flex items-center gap-2 overflow-hidden">
+          <div className="flex min-w-0 items-center gap-2 overflow-hidden">
             <img
               src="/logo.png"
               alt="Timetools Logo"
               className="app-logo h-8 w-auto shrink-0"
             />
+
             {isOpen && (
-              <h2 className="text-xl font-bold text-[var(--text)] whitespace-nowrap">
+              <h2 className="whitespace-nowrap text-xl font-bold text-[var(--text)]">
                 Time Tools
               </h2>
             )}
           </div>
 
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="rounded-md p-2 text-[var(--text)] hover:bg-white/10"
+            aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+            className="shrink-0 rounded-md p-2 text-[var(--text)] hover:bg-white/10"
           >
             {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex w-full items-center justify-between p-2 sm:mt-4 sm:flex-1 sm:flex-col">
-          {/* --- Mobile display --- */}
-          <ul className="flex w-full justify-around sm:hidden">
+        {/* NAVIGATION */}
+        <nav className="flex min-w-0 w-full items-center justify-between p-2 sm:mt-4 sm:flex-1 sm:flex-col">
+          {/* MOBILE NAVIGATION */}
+          <ul className="flex w-full min-w-0 items-center justify-around sm:hidden">
             {primaryMobileItems.map((item) => {
               const Icon = item.icon;
+
               return (
-                <li key={item.path}>
+                <li key={item.path} className="min-w-0">
                   <Link
                     to={item.path}
-                    className="flex items-center justify-center rounded-2xl p-3 text-[var(--text)]"
+                    aria-label={item.name}
+                    className="flex items-center justify-center rounded-2xl p-3 text-[var(--text)] hover:bg-[var(--surface-hover)]"
                   >
                     <Icon size={22} />
                   </Link>
@@ -91,11 +100,13 @@ function Sidebar() {
               );
             })}
 
-            {/* Icon "..." */}
             {secondaryMobileItems.length > 0 && (
-              <li>
+              <li className="min-w-0">
                 <button
+                  type="button"
                   onClick={() => setShowMoreMobile(!showMoreMobile)}
+                  aria-label="More navigation options"
+                  aria-expanded={showMoreMobile}
                   className="flex items-center justify-center rounded-2xl p-3 text-[var(--text)] hover:bg-[var(--surface-hover)]"
                 >
                   <MoreHorizontal size={22} />
@@ -104,22 +115,26 @@ function Sidebar() {
             )}
           </ul>
 
-          {/* --- Desktop display --- */}
-          <ul className="hidden sm:flex w-full sm:flex-col sm:space-y-2">
+          {/* DESKTOP NAVIGATION */}
+          <ul className="hidden w-full min-w-0 sm:flex sm:flex-col sm:space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
+
               return (
-                <li key={item.path}>
+                <li key={item.path} className="min-w-0">
                   <Link
                     to={item.path}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center rounded-2xl p-3 text-[var(--text)] transition-colors hover:bg-[var(--surface-hover)] ${
+                    className={`flex min-w-0 items-center rounded-2xl p-3 text-[var(--text)] transition-colors hover:bg-[var(--surface-hover)] ${
                       isOpen ? "sm:gap-4" : "justify-center"
                     }`}
                   >
-                    <Icon size={22} />
+                    <Icon size={22} className="shrink-0" />
+
                     {isOpen && (
-                      <span className="whitespace-nowrap">{item.name}</span>
+                      <span className="whitespace-nowrap">
+                        {item.name}
+                      </span>
                     )}
                   </Link>
                 </li>
@@ -127,13 +142,13 @@ function Sidebar() {
             })}
           </ul>
 
-          {/* ThemeToggle */}
+          {/* THEME TOGGLE */}
           <div className="hidden sm:block">
             <ThemeToggle isOpen={isOpen} />
           </div>
         </nav>
       </aside>
-    </div>
+    </>
   );
 }
 
