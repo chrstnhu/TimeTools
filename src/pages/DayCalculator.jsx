@@ -102,13 +102,28 @@ function DayCalculator() {
                   <label className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2 block">
                     Days Amount
                   </label>
+
                   <Input
                     type="number"
                     min="0"
                     value={daysToAdd}
-                    onChange={(e) =>
-                      setDaysToAdd(Math.max(0, Number(e.target.value)))
-                    }
+                    onFocus={(e) => {
+                      if (Number(daysToAdd) === 0) {
+                        e.target.select();
+                      }
+                    }}
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      setDaysToAdd(
+                        value === "" ? "" : Math.max(0, Number(value))
+                      );
+                    }}
+                    onBlur={() => {
+                      if (daysToAdd === "" || daysToAdd == null) {
+                        setDaysToAdd(0);
+                      }
+                    }}
                     className="w-full text-center rounded-xl border border-[var(--border)] font-bold text-sm sm:text-base p-2.5 sm:p-3"
                   />
                 </div>
