@@ -103,60 +103,60 @@ function Timer() {
             </div>
 
             <div className="flex justify-center gap-2 pt-3 items-center">
-              <div className="flex flex-col">
+              <div className="flex flex-col items-center">
                 <Input
-                  className="w-[80px]
-                  sm:w-[120px]
-                  rounded-3xl
-                  py-5
-                  text-center
-                  text-lg
-                  sm:text-3xl 
-                  font-bold
-                  shadow-sm
-                  transition
-                  focus:scale-105"
+                  className="w-[80px] sm:w-[120px] rounded-3xl py-5 text-center text-lg sm:text-3xl font-bold shadow-sm transition focus:scale-105"
                   type="number"
                   min="0"
                   placeholder="Minutes"
                   value={timerInput.minutes}
-                  onChange={(e) =>
-                    setTimerInput({
-                      ...timerInput,
-                      minutes: Number(e.target.value),
-                    })
-                  }
+                  onFocus={(e) => {
+                    if (timerInput.minutes === 0) e.target.select();
+                  }}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+
+                    setTimerInput((prev) => ({
+                      ...prev,
+                      minutes:
+                        raw === ""
+                          ? 0
+                          : Math.max(0, Number(raw)),
+                    }));
+                  }}
                 />
+
                 <span className="text-xs font-medium uppercase tracking-widest text-gray-400">
                   Minutes
                 </span>
               </div>
-              <p>:</p>
+
+              <p className="text-2xl font-bold">:</p>
+
               <div className="flex flex-col items-center">
                 <Input
-                  className="w-[80px]
-                  sm:w-[120px]
-                  rounded-3xl
-                  py-5
-                  text-center
-                  text-lg
-                  sm:text-3xl 
-                  font-bold
-                  shadow-sm
-                  transition
-                  focus:scale-105"
+                  className="w-[80px] sm:w-[120px] rounded-3xl py-5 text-center text-lg sm:text-3xl font-bold shadow-sm transition focus:scale-105"
                   type="number"
                   min="0"
                   max="59"
                   placeholder="Seconds"
                   value={timerInput.seconds}
-                  onChange={(e) =>
-                    setTimerInput({
-                      ...timerInput,
-                      seconds: Number(e.target.value),
-                    })
-                  }
+                  onFocus={(e) => {
+                    if (timerInput.seconds === 0) e.target.select();
+                  }}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+
+                    setTimerInput((prev) => ({
+                      ...prev,
+                      seconds:
+                        raw === ""
+                          ? 0
+                          : Math.min(59, Math.max(0, Number(raw))),
+                    }));
+                  }}
                 />
+
                 <span className="text-xs font-medium uppercase tracking-widest text-gray-400">
                   Seconds
                 </span>
